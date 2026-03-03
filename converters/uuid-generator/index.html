@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔑 UUID Generator - Converters & Tools</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../../home.html" class="back-link">← Zurück</a>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        </header>
+
+        <div class="converter-header">
+            <span class="converter-icon">🔑</span>
+            <h1>UUID Generator</h1>
+            <p class="converter-subtitle">Generiere eindeutige Universally Unique Identifiers (Version 4)</p>
+        </div>
+
+        <div class="converter-box">
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="generate" onclick="switchTab('generate')">
+                    🎲 Generieren
+                </button>
+                <button class="tab-btn" data-tab="validate" onclick="switchTab('validate')">
+                    ✅ Validieren
+                </button>
+            </div>
+
+            <!-- Generate Tab -->
+            <div id="generateTab" class="tab-content active">
+                <div class="input-group">
+                    <label for="uuidCount">Anzahl der UUIDs:</label>
+                    <select id="uuidCount">
+                        <option value="1" selected>1 UUID</option>
+                        <option value="5">5 UUIDs</option>
+                        <option value="10">10 UUIDs</option>
+                        <option value="25">25 UUIDs</option>
+                        <option value="50">50 UUIDs</option>
+                        <option value="100">100 UUIDs</option>
+                    </select>
+                </div>
+
+                <div class="format-options">
+                    <h3>Format-Optionen:</h3>
+                    <label class="checkbox-option">
+                        <input type="radio" name="caseOption" value="lowercase" checked>
+                        <span>Kleinbuchstaben (empfohlen)</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="radio" name="caseOption" value="uppercase">
+                        <span>Großbuchstaben</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" id="withoutHyphens">
+                        <span>Ohne Bindestriche</span>
+                    </label>
+                    <label class="checkbox-option">
+                        <input type="checkbox" id="withBraces">
+                        <span>Mit geschweiften Klammern { }</span>
+                    </label>
+                </div>
+
+                <button class="btn btn-primary" onclick="generateUUIDs()">
+                    🎲 UUIDs generieren
+                </button>
+
+                <div id="generateResults" style="display: none;">
+                    <div class="results-header">
+                        <h3>Generierte UUIDs:</h3>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary btn-small" onclick="copyAllUUIDs()">
+                                📋 Alle kopieren
+                            </button>
+                            <button class="btn btn-secondary btn-small" onclick="downloadUUIDs()">
+                                💾 Als .txt speichern
+                            </button>
+                        </div>
+                    </div>
+                    <div id="uuidList"></div>
+                </div>
+            </div>
+
+            <!-- Validate Tab -->
+            <div id="validateTab" class="tab-content">
+                <div class="input-group">
+                    <label for="validateInput">UUID zum Validieren:</label>
+                    <input 
+                        type="text" 
+                        id="validateInput" 
+                        placeholder="z.B. 550e8400-e29b-41d4-a716-446655440000"
+                        oninput="validateUUID()">
+                </div>
+
+                <div id="validationResult" style="display: none;"></div>
+
+                <div class="uuid-examples">
+                    <h4>Beispiele für gültige UUIDs:</h4>
+                    <div class="example-item" onclick="fillValidateInput('550e8400-e29b-41d4-a716-446655440000')">
+                        <code>550e8400-e29b-41d4-a716-446655440000</code>
+                        <span class="example-label">Mit Bindestrichen (lowercase)</span>
+                    </div>
+                    <div class="example-item" onclick="fillValidateInput('550E8400-E29B-41D4-A716-446655440000')">
+                        <code>550E8400-E29B-41D4-A716-446655440000</code>
+                        <span class="example-label">Mit Bindestrichen (uppercase)</span>
+                    </div>
+                    <div class="example-item" onclick="fillValidateInput('550e8400e29b41d4a716446655440000')">
+                        <code>550e8400e29b41d4a716446655440000</code>
+                        <span class="example-label">Ohne Bindestriche</span>
+                    </div>
+                    <div class="example-item" onclick="fillValidateInput('{550e8400-e29b-41d4-a716-446655440000}')">
+                        <code>{550e8400-e29b-41d4-a716-446655440000}</code>
+                        <span class="example-label">Mit geschweiften Klammern</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>💡 Was ist eine UUID?</h3>
+            <p><strong>UUID (Universally Unique Identifier)</strong> ist eine 128-Bit-Zahl, die verwendet wird, um Objekte eindeutig in Computersystemen zu identifizieren.</p>
+
+            <h4>UUID Version 4 (Random):</h4>
+            <ul>
+                <li><strong>Format:</strong> xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx</li>
+                <li><strong>Länge:</strong> 36 Zeichen (mit Bindestrichen) oder 32 Zeichen (ohne)</li>
+                <li><strong>Bit-Länge:</strong> 128 Bit</li>
+                <li><strong>Generierung:</strong> Zufällig generiert mit kryptografischen Zufallszahlen</li>
+                <li><strong>Kollisionswahrscheinlichkeit:</strong> Praktisch null (2^122 mögliche Werte)</li>
+            </ul>
+
+            <h4>Struktur einer UUID v4:</h4>
+            <div class="uuid-structure">
+                <code class="structure-example">
+                    <span class="uuid-part">550e8400</span>-<span class="uuid-part">e29b</span>-<span class="uuid-version">4</span>1d4-<span class="uuid-variant">a</span>716-<span class="uuid-part">446655440000</span>
+                </code>
+                <div class="structure-explanation">
+                    <p><span class="uuid-part">■</span> Zufällige Hexadezimalziffern (0-9, a-f)</p>
+                    <p><span class="uuid-version">■</span> Version (immer "4" für UUID v4)</p>
+                    <p><span class="uuid-variant">■</span> Variant (immer "8", "9", "a" oder "b")</p>
+                </div>
+            </div>
+
+            <h4>Verwendungszwecke:</h4>
+            <ul>
+                <li>Datenbank-Primärschlüssel</li>
+                <li>Eindeutige Dateinamen und Session-IDs</li>
+                <li>Verteilte Systeme ohne zentrale Koordination</li>
+                <li>API-Anforderungen und Transaktions-IDs</li>
+                <li>Objekt-Identifikation in NoSQL-Datenbanken</li>
+            </ul>
+
+            <div class="advantages">
+                <h4>✅ Vorteile:</h4>
+                <ul>
+                    <li>Keine zentrale Instanz zur Generierung notwendig</li>
+                    <li>Kann offline und parallel generiert werden</li>
+                    <li>Extrem geringe Kollisionswahrscheinlichkeit</li>
+                    <li>Plattform- und sprachunabhängig</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Made with ❤️ | <a href="../../home.html">Alle Converter</a></p>
+    </footer>
+
+    <script>
+        // Theme Management
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeButton(newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const btn = document.getElementById('themeBtn');
+            btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton(savedTheme);
+        }
+
+        loadTheme();
+
+        // Tab switching
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tab === tab) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+
+            if (tab === 'generate') {
+                document.getElementById('generateTab').classList.add('active');
+            } else {
+                document.getElementById('validateTab').classList.add('active');
+            }
+        }
+
+        // Generate single UUID v4
+        function generateUUIDv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                const r = Math.random() * 16 | 0;
+                const v = c === 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+
+        // Format UUID based on options
+        function formatUUID(uuid) {
+            const caseOption = document.querySelector('input[name="caseOption"]:checked').value;
+            const withoutHyphens = document.getElementById('withoutHyphens').checked;
+            const withBraces = document.getElementById('withBraces').checked;
+
+            let formatted = uuid;
+
+            if (caseOption === 'uppercase') {
+                formatted = formatted.toUpperCase();
+            }
+
+            if (withoutHyphens) {
+                formatted = formatted.replace(/-/g, '');
+            }
+
+            if (withBraces) {
+                formatted = `{${formatted}}`;
+            }
+
+            return formatted;
+        }
+
+        // Generate multiple UUIDs
+        function generateUUIDs() {
+            const count = parseInt(document.getElementById('uuidCount').value);
+            const uuids = [];
+
+            for (let i = 0; i < count; i++) {
+                const uuid = generateUUIDv4();
+                uuids.push(formatUUID(uuid));
+            }
+
+            displayUUIDs(uuids);
+        }
+
+        // Display generated UUIDs
+        function displayUUIDs(uuids) {
+            const container = document.getElementById('uuidList');
+            container.innerHTML = '';
+
+            uuids.forEach((uuid, index) => {
+                const uuidItem = document.createElement('div');
+                uuidItem.className = 'uuid-item';
+                uuidItem.innerHTML = `
+                    <code class="uuid-text">${uuid}</code>
+                    <button class="btn-copy" onclick="copyUUID('${uuid}', ${index})" id="copyBtn${index}">
+                        📋
+                    </button>
+                `;
+                container.appendChild(uuidItem);
+            });
+
+            document.getElementById('generateResults').style.display = 'block';
+        }
+
+        // Copy single UUID
+        function copyUUID(uuid, index) {
+            navigator.clipboard.writeText(uuid).then(() => {
+                const btn = document.getElementById(`copyBtn${index}`);
+                btn.textContent = '✓';
+                btn.style.background = '#10b981';
+                setTimeout(() => {
+                    btn.textContent = '📋';
+                    btn.style.background = '';
+                }, 1500);
+            });
+        }
+
+        // Copy all UUIDs
+        function copyAllUUIDs() {
+            const uuids = Array.from(document.querySelectorAll('.uuid-text'))
+                .map(el => el.textContent)
+                .join('\n');
+            
+            navigator.clipboard.writeText(uuids).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Kopiert!';
+                btn.style.background = '#10b981';
+                btn.style.color = 'white';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 2000);
+            });
+        }
+
+        // Download UUIDs as text file
+        function downloadUUIDs() {
+            const uuids = Array.from(document.querySelectorAll('.uuid-text'))
+                .map(el => el.textContent)
+                .join('\n');
+            
+            const blob = new Blob([uuids], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `uuids-${Date.now()}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Validate UUID
+        function validateUUID() {
+            const input = document.getElementById('validateInput').value.trim();
+            const resultDiv = document.getElementById('validationResult');
+
+            if (!input) {
+                resultDiv.style.display = 'none';
+                return;
+            }
+
+            // UUID v4 regex patterns
+            const patterns = {
+                standard: /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
+                noHyphens: /^[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$/i,
+                withBraces: /^\{[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\}$/i
+            };
+
+            let isValid = false;
+            let format = '';
+
+            if (patterns.standard.test(input)) {
+                isValid = true;
+                format = 'Standard UUID v4 mit Bindestrichen';
+            } else if (patterns.noHyphens.test(input)) {
+                isValid = true;
+                format = 'UUID v4 ohne Bindestriche';
+            } else if (patterns.withBraces.test(input)) {
+                isValid = true;
+                format = 'UUID v4 mit geschweiften Klammern';
+            }
+
+            if (isValid) {
+                resultDiv.className = 'validation-result valid';
+                resultDiv.innerHTML = `
+                    <div class="result-icon">✅</div>
+                    <div class="result-content">
+                        <h4>Gültige UUID!</h4>
+                        <p><strong>Format:</strong> ${format}</p>
+                        <p><strong>Version:</strong> 4 (Random)</p>
+                        <p><strong>Länge:</strong> ${input.length} Zeichen</p>
+                    </div>
+                `;
+            } else {
+                resultDiv.className = 'validation-result invalid';
+                resultDiv.innerHTML = `
+                    <div class="result-icon">❌</div>
+                    <div class="result-content">
+                        <h4>Ungültige UUID</h4>
+                        <p>Dies ist keine gültige UUID Version 4.</p>
+                        <p>Überprüfe das Format und stelle sicher, dass:</p>
+                        <ul>
+                            <li>Die Version "4" an der richtigen Stelle steht</li>
+                            <li>Nur Hexadezimalzeichen (0-9, a-f) verwendet werden</li>
+                            <li>Die Länge korrekt ist (36 mit Bindestrichen, 32 ohne)</li>
+                        </ul>
+                    </div>
+                `;
+            }
+
+            resultDiv.style.display = 'flex';
+        }
+
+        // Fill validation input with example
+        function fillValidateInput(uuid) {
+            document.getElementById('validateInput').value = uuid;
+            validateUUID();
+            switchTab('validate');
+        }
+    </script>
+</body>
+</html>
