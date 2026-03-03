@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📱 QR Code Generator - Converters & Tools</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../../home.html" class="back-link">← Zurück zur Hauptseite</a>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Dark/Light Mode">🌙</button>
+        </header>
+
+        <div class="converter-header">
+            <span class="converter-icon">📱</span>
+            <h1>QR Code Generator</h1>
+            <p class="converter-subtitle">Erstelle QR Codes für URLs, Text, WiFi, vCards und mehr</p>
+        </div>
+
+        <div class="converter-box">
+            <div class="input-group">
+                <label>QR Code Typ</label>
+                <select id="qrType" onchange="updateInputFields()">
+                    <option value="text">📝 Text/URL</option>
+                    <option value="wifi">📶 WiFi</option>
+                    <option value="vcard">👤 Visitenkarte (vCard)</option>
+                    <option value="email">📧 E-Mail</option>
+                    <option value="phone">📞 Telefon</option>
+                </select>
+            </div>
+
+            <div id="inputFields">
+                <!-- Input fields werden dynamisch geladen -->
+            </div>
+
+            <div class="options-group">
+                <div class="input-group">
+                    <label>QR Code Größe</label>
+                    <select id="qrSize">
+                        <option value="200">Klein (200x200)</option>
+                        <option value="300" selected>Mittel (300x300)</option>
+                        <option value="400">Groß (400x400)</option>
+                        <option value="500">Sehr Groß (500x500)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Farbe</label>
+                    <div class="color-inputs">
+                        <div>
+                            <label class="small-label">Vordergrund</label>
+                            <input type="color" id="qrColorDark" value="#000000">
+                        </div>
+                        <div>
+                            <label class="small-label">Hintergrund</label>
+                            <input type="color" id="qrColorLight" value="#ffffff">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="generateQR()">🎨 QR Code erstellen</button>
+                <button class="btn btn-secondary" onclick="downloadQR()">💾 Als PNG herunterladen</button>
+                <button class="btn btn-secondary" onclick="clearQR()">🗑️ Löschen</button>
+            </div>
+
+            <div id="qrResult" class="qr-result">
+                <div class="placeholder">
+                    <span class="placeholder-icon">📱</span>
+                    <p>Dein QR Code wird hier angezeigt</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>ℹ️ Über QR Codes</h3>
+            <p><strong>QR Code</strong> steht für "Quick Response Code" und wurde 1994 in Japan entwickelt.</p>
+            <p>QR Codes können verschiedene Datentypen speichern: URLs, Text, WiFi-Zugangsdaten, Kontaktinformationen und mehr. Sie sind einfach mit Smartphone-Kameras zu scannen.</p>
+            <ul>
+                <li>📱 <strong>URLs:</strong> Perfekt für Website-Links</li>
+                <li>📶 <strong>WiFi:</strong> Teile dein Netzwerk ohne Passwort-Eingabe</li>
+                <li>👤 <strong>vCard:</strong> Kontaktdaten schnell austauschen</li>
+                <li>📧 <strong>E-Mail:</strong> Vorausgefüllte E-Mail-Formulare</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Converters & Tools • <a href="../../home.html">Alle Tools</a></p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script>
+        let qrcode = null;
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeButton();
+        }
+
+        function updateThemeButton() {
+            const theme = document.documentElement.getAttribute('data-theme') || 'light';
+            document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton();
+            updateInputFields();
+        });
+
+        function updateInputFields() {
+            const type = document.getElementById('qrType').value;
+            const container = document.getElementById('inputFields');
+            
+            let html = '';
+            
+            switch(type) {
+                case 'text':
+                    html = `
+                        <div class="input-group">
+                            <label>Text oder URL eingeben</label>
+                            <textarea id="qrData" rows="4" placeholder="https://example.com oder beliebiger Text..."></textarea>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'wifi':
+                    html = `
+                        <div class="input-group">
+                            <label>Netzwerkname (SSID)</label>
+                            <input type="text" id="wifiSSID" placeholder="Mein WiFi">
+                        </div>
+                        <div class="input-group">
+                            <label>Passwort</label>
+                            <input type="text" id="wifiPassword" placeholder="Passwort">
+                        </div>
+                        <div class="input-group">
+                            <label>Verschlüsselung</label>
+                            <select id="wifiEncryption">
+                                <option value="WPA">WPA/WPA2</option>
+                                <option value="WEP">WEP</option>
+                                <option value="">Keine</option>
+                            </select>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'vcard':
+                    html = `
+                        <div class="input-group">
+                            <label>Vorname</label>
+                            <input type="text" id="vcardFirstName" placeholder="Max">
+                        </div>
+                        <div class="input-group">
+                            <label>Nachname</label>
+                            <input type="text" id="vcardLastName" placeholder="Mustermann">
+                        </div>
+                        <div class="input-group">
+                            <label>Telefon</label>
+                            <input type="tel" id="vcardPhone" placeholder="+49 123 456789">
+                        </div>
+                        <div class="input-group">
+                            <label>E-Mail</label>
+                            <input type="email" id="vcardEmail" placeholder="max@example.com">
+                        </div>
+                        <div class="input-group">
+                            <label>Firma (optional)</label>
+                            <input type="text" id="vcardOrg" placeholder="Firma GmbH">
+                        </div>
+                    `;
+                    break;
+                    
+                case 'email':
+                    html = `
+                        <div class="input-group">
+                            <label>E-Mail Adresse</label>
+                            <input type="email" id="emailAddress" placeholder="info@example.com">
+                        </div>
+                        <div class="input-group">
+                            <label>Betreff (optional)</label>
+                            <input type="text" id="emailSubject" placeholder="Betreff">
+                        </div>
+                        <div class="input-group">
+                            <label>Nachricht (optional)</label>
+                            <textarea id="emailBody" rows="3" placeholder="Nachricht..."></textarea>
+                        </div>
+                    `;
+                    break;
+                    
+                case 'phone':
+                    html = `
+                        <div class="input-group">
+                            <label>Telefonnummer</label>
+                            <input type="tel" id="phoneNumber" placeholder="+49 123 456789">
+                        </div>
+                    `;
+                    break;
+            }
+            
+            container.innerHTML = html;
+        }
+
+        function getQRData() {
+            const type = document.getElementById('qrType').value;
+            
+            switch(type) {
+                case 'text':
+                    return document.getElementById('qrData').value;
+                    
+                case 'wifi':
+                    const ssid = document.getElementById('wifiSSID').value;
+                    const pass = document.getElementById('wifiPassword').value;
+                    const enc = document.getElementById('wifiEncryption').value;
+                    return `WIFI:T:${enc};S:${ssid};P:${pass};;`;
+                    
+                case 'vcard':
+                    const firstName = document.getElementById('vcardFirstName').value;
+                    const lastName = document.getElementById('vcardLastName').value;
+                    const phone = document.getElementById('vcardPhone').value;
+                    const email = document.getElementById('vcardEmail').value;
+                    const org = document.getElementById('vcardOrg').value;
+                    return `BEGIN:VCARD
+VERSION:3.0
+N:${lastName};${firstName}
+FN:${firstName} ${lastName}
+TEL:${phone}
+EMAIL:${email}
+ORG:${org}
+END:VCARD`;
+                    
+                case 'email':
+                    const addr = document.getElementById('emailAddress').value;
+                    const subj = document.getElementById('emailSubject').value;
+                    const body = document.getElementById('emailBody').value;
+                    let emailStr = `mailto:${addr}`;
+                    const params = [];
+                    if (subj) params.push(`subject=${encodeURIComponent(subj)}`);
+                    if (body) params.push(`body=${encodeURIComponent(body)}`);
+                    if (params.length) emailStr += '?' + params.join('&');
+                    return emailStr;
+                    
+                case 'phone':
+                    return `tel:${document.getElementById('phoneNumber').value}`;
+            }
+        }
+
+        function generateQR() {
+            const data = getQRData();
+            
+            if (!data || data.trim() === '') {
+                alert('Bitte fülle die erforderlichen Felder aus!');
+                return;
+            }
+            
+            const size = parseInt(document.getElementById('qrSize').value);
+            const colorDark = document.getElementById('qrColorDark').value;
+            const colorLight = document.getElementById('qrColorLight').value;
+            
+            const resultDiv = document.getElementById('qrResult');
+            resultDiv.innerHTML = '<div id="qrcodeCanvas"></div>';
+            
+            qrcode = new QRCode(document.getElementById('qrcodeCanvas'), {
+                text: data,
+                width: size,
+                height: size,
+                colorDark: colorDark,
+                colorLight: colorLight,
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+
+        function downloadQR() {
+            if (!qrcode) {
+                alert('Bitte erstelle zuerst einen QR Code!');
+                return;
+            }
+            
+            const canvas = document.querySelector('#qrcodeCanvas canvas');
+            if (!canvas) {
+                alert('Fehler beim Erstellen des Downloads!');
+                return;
+            }
+            
+            canvas.toBlob(function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'qrcode.png';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        }
+
+        function clearQR() {
+            const resultDiv = document.getElementById('qrResult');
+            resultDiv.innerHTML = `
+                <div class="placeholder">
+                    <span class="placeholder-icon">📱</span>
+                    <p>Dein QR Code wird hier angezeigt</p>
+                </div>
+            `;
+            qrcode = null;
+            updateInputFields();
+        }
+    </script>
+</body>
+</html>

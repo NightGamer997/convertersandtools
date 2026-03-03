@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔧 Converters & Tools - Deine Online Converter Sammlung</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --accent: #f093fb;
+            --text: #1f2937;
+            --bg: #ffffff;
+            --bg-secondary: #f9fafb;
+            --card-bg: #ffffff;
+            --border: #e5e7eb;
+            --shadow: rgba(0, 0, 0, 0.08);
+            --shadow-hover: rgba(102, 126, 234, 0.25);
+        }
+
+        [data-theme="dark"] {
+            --text: #e5e7eb;
+            --bg: #0f172a;
+            --bg-secondary: #1e293b;
+            --card-bg: #1e293b;
+            --border: #334155;
+            --shadow: rgba(0, 0, 0, 0.4);
+            --shadow-hover: rgba(102, 126, 234, 0.3);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            transition: all 0.3s ease;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            margin-bottom: 20px;
+        }
+
+        .logo {
+            font-size: 2em;
+            font-weight: bold;
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 1.3em;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px var(--shadow-hover);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            border-radius: 24px;
+            color: white;
+            box-shadow: 0 10px 40px var(--shadow-hover);
+        }
+
+        .hero h1 {
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: 1.3em;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-box {
+            max-width: 600px;
+            margin: 40px auto 0;
+            position: relative;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 18px 50px 18px 24px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.95);
+            color: var(--text);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .search-box input::placeholder {
+            color: #9ca3af;
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+        }
+
+        .section-title {
+            font-size: 2em;
+            margin: 60px 0 30px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .converters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 60px;
+        }
+
+        .converter-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 28px;
+            text-decoration: none;
+            color: var(--text);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px var(--shadow);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .converter-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .converter-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 28px var(--shadow-hover);
+            border-color: var(--primary);
+        }
+
+        .converter-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .converter-icon {
+            font-size: 3em;
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        .converter-name {
+            font-size: 1.4em;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: var(--text);
+        }
+
+        .converter-desc {
+            font-size: 0.95em;
+            color: var(--text);
+            opacity: 0.7;
+            flex-grow: 1;
+            line-height: 1.5;
+        }
+
+        .converter-badge {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 6px 14px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            align-self: flex-start;
+        }
+
+        .badge-new {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 80px;
+            border-top: 1px solid var(--border);
+            color: var(--text);
+            opacity: 0.7;
+        }
+
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            margin: 0 10px;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5em;
+            }
+
+            .hero p {
+                font-size: 1.1em;
+            }
+
+            .converters-grid {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 16px;
+            }
+
+            .section-title {
+                font-size: 1.6em;
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .converter-card {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        .converter-card:nth-child(1) { animation-delay: 0.05s; }
+        .converter-card:nth-child(2) { animation-delay: 0.1s; }
+        .converter-card:nth-child(3) { animation-delay: 0.15s; }
+        .converter-card:nth-child(4) { animation-delay: 0.2s; }
+        .converter-card:nth-child(5) { animation-delay: 0.25s; }
+        .converter-card:nth-child(6) { animation-delay: 0.3s; }
+        .converter-card:nth-child(7) { animation-delay: 0.35s; }
+        .converter-card:nth-child(8) { animation-delay: 0.4s; }
+        .converter-card:nth-child(9) { animation-delay: 0.45s; }
+        .converter-card:nth-child(n+10) { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span>🔧</span>
+                <span>Converters & Tools</span>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Dark/Light Mode">🌙</button>
+        </header>
+
+        <div class="hero">
+            <h1>Online Converter Tools</h1>
+            <p>Kostenlose Tools für alle deine Konvertierungs-Bedürfnisse. Schnell, einfach und ohne Anmeldung.</p>
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Suche nach Converter..." onkeyup="searchConverters()">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <h2 class="section-title">📝 Text & Code</h2>
+        <div class="converters-grid" id="text-converters">
+            <a href="converters/text-binary/index.html" class="converter-card">
+                <span class="converter-icon">🔤</span>
+                <div class="converter-name">Text zu Binär</div>
+                <p class="converter-desc">Konvertiere Text in Binärcode und umgekehrt</p>
+                <span class="converter-badge">Kostenlos</span>
+            </a>
+
+            <a href="converters/base64/index.html" class="converter-card">
+                <span class="converter-icon">🔐</span>
+                <div class="converter-name">Base64 Encoder</div>
+                <p class="converter-desc">Kodiere und dekodiere Text in Base64 Format</p>
+                <span class="converter-badge">Kostenlos</span>
+            </a>
+
+            <a href="converters/url/index.html" class="converter-card">
+                <span class="converter-icon">🔗</span>
+                <div class="converter-name">URL Encoder</div>
+                <p class="converter-desc">Kodiere und dekodiere URLs sicher</p>
+                <span class="converter-badge">Kostenlos</span>
+            </a>
+
+            <a href="converters/json/index.html" class="converter-card">
+                <span class="converter-icon">📝</span>
+                <div class="converter-name">JSON Formatter</div>
+                <p class="converter-desc">Formatiere, validiere und minimiere JSON</p>
+                <span class="converter-badge">Kostenlos</span>
+            </a>
+
+            <a href="converters/markdown/index.html" class="converter-card">
+                <span class="converter-icon">📄</span>
+                <div class="converter-name">Markdown zu HTML</div>
+                <p class="converter-desc">Konvertiere Markdown in HTML</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+
+            <a href="converters/case-converter/index.html" class="converter-card">
+                <span class="converter-icon">🔡</span>
+                <div class="converter-name">Text Case Converter</div>
+                <p class="converter-desc">UPPERCASE, lowercase, camelCase, etc.</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+        </div>
+
+        <h2 class="section-title">🎨 Farben & Design</h2>
+        <div class="converters-grid" id="color-converters">
+            <a href="converters/color/index.html" class="converter-card">
+                <span class="converter-icon">🎨</span>
+                <div class="converter-name">Farb-Konverter</div>
+                <p class="converter-desc">RGB, HEX, HSL Konvertierungen mit Vorschau</p>
+                <span class="converter-badge">Kostenlos</span>
+            </a>
+
+            <a href="converters/css-gradient/index.html" class="converter-card">
+                <span class="converter-icon">🌈</span>
+                <div class="converter-name">CSS Gradient</div>
+                <p class="converter-desc">Erstelle schöne CSS Gradienten</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+        </div>
+
+        <h2 class="section-title">📐 Einheiten & Zahlen</h2>
+        <div class="converters-grid" id="unit-converters">
+            <a href="converters/units/index.html" class="converter-card">
+                <span class="converter-icon">📏</span>
+                <div class="converter-name">Einheiten-Umrechner</div>
+                <p class="converter-desc">Länge, Gewicht, Temperatur umrechnen</p>
+                <span class="converter-badge">Kostenlos</span>
+            </a>
+
+            <a href="converters/number/index.html" class="converter-card">
+                <span class="converter-icon">📊</span>
+                <div class="converter-name">Zahlensysteme</div>
+                <p class="converter-desc">Dezimal, Binär, Hex, Oktal Konverter</p>
+                <span class="converter-badge">Kostenlos</span>
+            </a>
+
+            <a href="converters/filesize/index.html" class="converter-card">
+                <span class="converter-icon">💾</span>
+                <div class="converter-name">Dateigröße</div>
+                <p class="converter-desc">Bytes, KB, MB, GB, TB umrechnen</p>
+                <span class="converter-badge">Kostenlos</span>
+            </a>
+
+            <a href="converters/currency/index.html" class="converter-card">
+                <span class="converter-icon">💱</span>
+                <div class="converter-name">Währungsrechner</div>
+                <p class="converter-desc">Alle Weltwährungen umrechnen</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+        </div>
+
+        <h2 class="section-title">🖼️ Bild & PDF</h2>
+        <div class="converters-grid" id="image-converters">
+            <a href="converters/image-converter/index.html" class="converter-card">
+                <span class="converter-icon">🖼️</span>
+                <div class="converter-name">Bild Konverter</div>
+                <p class="converter-desc">JPG, PNG, WebP, GIF umwandeln</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+
+            <a href="converters/image-to-pdf/index.html" class="converter-card">
+                <span class="converter-icon">📸</span>
+                <div class="converter-name">Bild zu PDF</div>
+                <p class="converter-desc">Bilder in PDF konvertieren</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+
+            <a href="converters/image-compressor/index.html" class="converter-card">
+                <span class="converter-icon">🗜️</span>
+                <div class="converter-name">Bild Kompressor</div>
+                <p class="converter-desc">Bilder verlustfrei komprimieren</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+
+            <a href="converters/image-resizer/index.html" class="converter-card">
+                <span class="converter-icon">📐</span>
+                <div class="converter-name">Bild Größe ändern</div>
+                <p class="converter-desc">Bilder skalieren und zuschneiden</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+        </div>
+
+        <h2 class="section-title">⏰ Zeit & Datum</h2>
+        <div class="converters-grid" id="time-converters">
+            <a href="converters/unix/index.html" class="converter-card">
+                <span class="converter-icon">⏱️</span>
+                <div class="converter-name">Unix-Zeit</div>
+                <p class="converter-desc">Unix Timestamp zu Datum konvertieren</p>
+                <span class="converter-badge">Kostenlos</span>
+            </a>
+
+            <a href="converters/timezone/index.html" class="converter-card">
+                <span class="converter-icon">🌍</span>
+                <div class="converter-name">Zeitzone Konverter</div>
+                <p class="converter-desc">Zeiten zwischen Zeitzonen umrechnen</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+        </div>
+
+        <h2 class="section-title">🔧 Tools & Generatoren</h2>
+        <div class="converters-grid" id="tool-converters">
+            <a href="converters/qr-code/index.html" class="converter-card">
+                <span class="converter-icon">📱</span>
+                <div class="converter-name">QR Code Generator</div>
+                <p class="converter-desc">Erstelle QR Codes für URLs, Text, etc.</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+
+            <a href="converters/password-generator/index.html" class="converter-card">
+                <span class="converter-icon">🔒</span>
+                <div class="converter-name">Passwort Generator</div>
+                <p class="converter-desc">Sichere Passwörter generieren</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+
+            <a href="converters/hash-generator/index.html" class="converter-card">
+                <span class="converter-icon">🔑</span>
+                <div class="converter-name">Hash Generator</div>
+                <p class="converter-desc">MD5, SHA-1, SHA-256 Hashes erstellen</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+
+            <a href="converters/uuid-generator/index.html" class="converter-card">
+                <span class="converter-icon">🆔</span>
+                <div class="converter-name">UUID Generator</div>
+                <p class="converter-desc">Eindeutige IDs generieren</p>
+                <span class="converter-badge badge-new">Neu</span>
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Converters & Tools</p>
+        <p>
+            <a href="#" title="GitHub">GitHub</a>
+            <a href="#" title="Datenschutz">Datenschutz</a>
+            <a href="#" title="Kontakt">Kontakt</a>
+        </p>
+        <p style="margin-top: 10px; font-size: 0.9em;">Schnell • Kostenlos • Ohne Anmeldung • Privat</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeButton();
+        }
+
+        function updateThemeButton() {
+            const theme = document.documentElement.getAttribute('data-theme') || 'light';
+            document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function searchConverters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.converter-card');
+
+            cards.forEach(card => {
+                const name = card.querySelector('.converter-name').textContent.toLowerCase();
+                const desc = card.querySelector('.converter-desc').textContent.toLowerCase();
+                
+                if (name.includes(searchTerm) || desc.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton();
+        });
+    </script>
+</body>
+</html>

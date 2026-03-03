@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔤 Text zu Binär Konverter - Converters & Tools</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../../home.html" class="back-link">← Zurück zur Hauptseite</a>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Dark/Light Mode">🌙</button>
+        </header>
+
+        <div class="converter-header">
+            <span class="converter-icon">🔤</span>
+            <h1>Text zu Binär Konverter</h1>
+            <p class="converter-subtitle">Konvertiere Text in Binärcode und umgekehrt</p>
+        </div>
+
+        <div class="converter-box">
+            <div class="input-group">
+                <label>Text → Binär</label>
+                <textarea id="textInput" placeholder="Geben Sie Text ein..." rows="6"></textarea>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="textToBinary()">Zu Binär konvertieren</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard('binaryOutput')">Kopieren</button>
+                <button class="btn btn-secondary" onclick="clearInputs()">Löschen</button>
+            </div>
+            <div class="result-output" id="binaryOutput"></div>
+        </div>
+
+        <div class="converter-box">
+            <div class="input-group">
+                <label>Binär → Text</label>
+                <textarea id="binaryInput" placeholder="Binärcode eingeben (z.B. 01001000 01100101 01101100 01101100 01101111)..." rows="6"></textarea>
+            </div>
+            <div class="btn-group">
+                <button class="btn btn-primary" onclick="binaryToText()">Von Binär konvertieren</button>
+                <button class="btn btn-secondary" onclick="copyToClipboard('textOutput')">Kopieren</button>
+            </div>
+            <div class="result-output" id="textOutput"></div>
+        </div>
+
+        <div class="info-box">
+            <h3>ℹ️ Was ist Binär?</h3>
+            <p>Binärcode ist ein Zahlensystem, das nur zwei Ziffern verwendet: 0 und 1. Computer verwenden Binärcode, um alle Arten von Daten zu speichern und zu verarbeiten.</p>
+            <p>Jedes Zeichen wird als eine Sequenz von 8 Bits (ein Byte) dargestellt. Zum Beispiel: Der Buchstabe "A" ist 01000001 in Binär.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Converters & Tools • <a href="../../home.html">Alle Tools</a></p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeButton();
+        }
+
+        function updateThemeButton() {
+            const theme = document.documentElement.getAttribute('data-theme') || 'light';
+            document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton();
+        });
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            if (!text || text === '(leer)') {
+                alert('Nichts zum Kopieren!');
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                const original = element.textContent;
+                element.textContent = '✓ Kopiert!';
+                setTimeout(() => element.textContent = original, 1500);
+            }).catch(() => alert('Fehler beim Kopieren!'));
+        }
+
+        function textToBinary() {
+            const text = document.getElementById('textInput').value;
+            if (!text) {
+                document.getElementById('binaryOutput').textContent = '(leer)';
+                return;
+            }
+            let binary = '';
+            for (let i = 0; i < text.length; i++) {
+                binary += text.charCodeAt(i).toString(2).padStart(8, '0') + ' ';
+            }
+            document.getElementById('binaryOutput').textContent = binary.trim();
+        }
+
+        function binaryToText() {
+            const binary = document.getElementById('binaryInput').value;
+            if (!binary) {
+                document.getElementById('textOutput').textContent = '(leer)';
+                return;
+            }
+            let text = '';
+            try {
+                binary.trim().split(' ').forEach(byte => {
+                    if (byte) {
+                        const charCode = parseInt(byte, 2);
+                        if (isNaN(charCode)) throw new Error('Ungültiger Binärcode');
+                        text += String.fromCharCode(charCode);
+                    }
+                });
+                document.getElementById('textOutput').textContent = text || '(leer)';
+            } catch(e) {
+                document.getElementById('textOutput').textContent = '❌ Fehler: Ungültiger Binärcode!';
+            }
+        }
+
+        function clearInputs() {
+            document.getElementById('textInput').value = '';
+            document.getElementById('binaryOutput').textContent = '';
+            document.getElementById('binaryInput').value = '';
+            document.getElementById('textOutput').textContent = '';
+        }
+
+        // Auto-convert on input
+        document.getElementById('textInput').addEventListener('input', textToBinary);
+        document.getElementById('binaryInput').addEventListener('input', binaryToText);
+    </script>
+</body>
+</html>
