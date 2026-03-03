@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔒 Hash Generator - Converters & Tools</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <a href="../../home.html" class="back-link">← Zurück</a>
+            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+        </header>
+
+        <div class="converter-header">
+            <span class="converter-icon">🔒</span>
+            <h1>Hash Generator</h1>
+            <p class="converter-subtitle">Erstelle kryptografische Hashes mit verschiedenen Algorithmen</p>
+        </div>
+
+        <div class="converter-box">
+            <div class="input-group">
+                <label for="inputText">Text:</label>
+                <textarea 
+                    id="inputText" 
+                    rows="6" 
+                    placeholder="Text hier eingeben zum Hashen..."
+                    oninput="autoGenerate()"></textarea>
+            </div>
+
+            <div class="algorithm-tabs">
+                <button class="tab-btn active" data-algo="md5" onclick="selectAlgorithm('md5')">MD5</button>
+                <button class="tab-btn" data-algo="sha1" onclick="selectAlgorithm('sha1')">SHA-1</button>
+                <button class="tab-btn" data-algo="sha256" onclick="selectAlgorithm('sha256')">SHA-256</button>
+                <button class="tab-btn" data-algo="sha512" onclick="selectAlgorithm('sha512')">SHA-512</button>
+            </div>
+
+            <button class="btn btn-primary" onclick="generateHash()">
+                🔐 Hash generieren
+            </button>
+        </div>
+
+        <div id="resultsSection" style="display: none;">
+            <div class="converter-box">
+                <div class="hash-result">
+                    <div class="result-header">
+                        <h3 id="resultAlgoName">MD5 Hash</h3>
+                        <button class="btn btn-secondary btn-small" onclick="copyHash()">
+                            📋 Kopieren
+                        </button>
+                    </div>
+                    <div class="hash-output" id="hashOutput"></div>
+                    <div class="hash-info">
+                        <span id="hashLength"></span>
+                        <span id="hashBits"></span>
+                    </div>
+                </div>
+
+                <div class="all-hashes">
+                    <h3>Alle Hashes:</h3>
+                    <div id="allHashesContainer"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <h3>🔐 Hash-Algorithmen erklärt:</h3>
+            
+            <div class="algo-info">
+                <h4>MD5 (Message Digest Algorithm 5)</h4>
+                <ul>
+                    <li><strong>Hash-Länge:</strong> 128 Bit (32 Hex-Zeichen)</li>
+                    <li><strong>Geschwindigkeit:</strong> Sehr schnell</li>
+                    <li><strong>Sicherheit:</strong> ⚠️ Nicht mehr sicher für kryptographische Zwecke</li>
+                    <li><strong>Anwendung:</strong> Checksums, nicht-sicherheitskritische Prüfsummen</li>
+                </ul>
+            </div>
+
+            <div class="algo-info">
+                <h4>SHA-1 (Secure Hash Algorithm 1)</h4>
+                <ul>
+                    <li><strong>Hash-Länge:</strong> 160 Bit (40 Hex-Zeichen)</li>
+                    <li><strong>Geschwindigkeit:</strong> Schnell</li>
+                    <li><strong>Sicherheit:</strong> ⚠️ Veraltet, seit 2017 nicht mehr empfohlen</li>
+                    <li><strong>Anwendung:</strong> Legacy-Systeme, Git (für Commit-IDs)</li>
+                </ul>
+            </div>
+
+            <div class="algo-info">
+                <h4>SHA-256 (Secure Hash Algorithm 256)</h4>
+                <ul>
+                    <li><strong>Hash-Länge:</strong> 256 Bit (64 Hex-Zeichen)</li>
+                    <li><strong>Geschwindigkeit:</strong> Moderat</li>
+                    <li><strong>Sicherheit:</strong> ✅ Sehr sicher, aktueller Standard</li>
+                    <li><strong>Anwendung:</strong> Passwort-Hashing, Blockchain, SSL/TLS-Zertifikate</li>
+                </ul>
+            </div>
+
+            <div class="algo-info">
+                <h4>SHA-512 (Secure Hash Algorithm 512)</h4>
+                <ul>
+                    <li><strong>Hash-Länge:</strong> 512 Bit (128 Hex-Zeichen)</li>
+                    <li><strong>Geschwindigkeit:</strong> Schnell auf 64-Bit-Systemen</li>
+                    <li><strong>Sicherheit:</strong> ✅ Sehr sicher, höchste Sicherheit</li>
+                    <li><strong>Anwendung:</strong> Hochsichere Anwendungen, digitale Signaturen</li>
+                </ul>
+            </div>
+
+            <div class="warning-box">
+                <h4>⚠️ Wichtige Hinweise:</h4>
+                <p><strong>Keine Entschlüsselung:</strong> Hash-Funktionen sind Einweg-Funktionen - ein Hash kann nicht zurück in den Original-Text umgewandelt werden.</p>
+                <p><strong>Nicht für Passwörter:</strong> Für Passwort-Speicherung sollten spezielle Algorithmen wie bcrypt, Argon2 oder PBKDF2 verwendet werden, die Salting und Key-Stretching unterstützen.</p>
+                <p><strong>Gleicher Input = Gleicher Output:</strong> Der gleiche Text erzeugt immer den gleichen Hash (deterministische Funktion).</p>
+                <p><strong>Kollisionen:</strong> MD5 und SHA-1 sind anfällig für Kollisionsangriffe. Verwende SHA-256 oder höher für sicherheitskritische Anwendungen.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Made with ❤️ | <a href="../../home.html">Alle Converter</a></p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script>
+        let currentAlgorithm = 'md5';
+        let autoGenerateEnabled = false;
+
+        // Theme Management
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeButton(newTheme);
+        }
+
+        function updateThemeButton(theme) {
+            const btn = document.getElementById('themeBtn');
+            btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton(savedTheme);
+        }
+
+        loadTheme();
+
+        // Select algorithm
+        function selectAlgorithm(algo) {
+            currentAlgorithm = algo;
+            
+            // Update active tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.algo === algo) {
+                    btn.classList.add('active');
+                }
+            });
+
+            // Auto-generate if text exists and was already generated
+            if (autoGenerateEnabled && document.getElementById('inputText').value.trim()) {
+                generateHash();
+            }
+        }
+
+        // Auto generate on input
+        function autoGenerate() {
+            if (autoGenerateEnabled) {
+                generateHash();
+            }
+        }
+
+        // Generate hash
+        function generateHash() {
+            const text = document.getElementById('inputText').value;
+            
+            if (!text.trim()) {
+                alert('⚠️ Bitte gib einen Text ein!');
+                return;
+            }
+
+            autoGenerateEnabled = true;
+
+            // Generate all hashes
+            const hashes = {
+                md5: CryptoJS.MD5(text).toString(),
+                sha1: CryptoJS.SHA1(text).toString(),
+                sha256: CryptoJS.SHA256(text).toString(),
+                sha512: CryptoJS.SHA512(text).toString()
+            };
+
+            // Display current algorithm result
+            displayMainHash(currentAlgorithm, hashes[currentAlgorithm]);
+
+            // Display all hashes
+            displayAllHashes(hashes);
+
+            document.getElementById('resultsSection').style.display = 'block';
+            document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Display main hash result
+        function displayMainHash(algo, hash) {
+            const algoNames = {
+                md5: 'MD5',
+                sha1: 'SHA-1',
+                sha256: 'SHA-256',
+                sha512: 'SHA-512'
+            };
+
+            const hashLengths = {
+                md5: { chars: 32, bits: 128 },
+                sha1: { chars: 40, bits: 160 },
+                sha256: { chars: 64, bits: 256 },
+                sha512: { chars: 128, bits: 512 }
+            };
+
+            document.getElementById('resultAlgoName').textContent = `${algoNames[algo]} Hash`;
+            document.getElementById('hashOutput').textContent = hash;
+            document.getElementById('hashLength').textContent = `${hashLengths[algo].chars} Zeichen`;
+            document.getElementById('hashBits').textContent = `${hashLengths[algo].bits} Bit`;
+        }
+
+        // Display all hashes
+        function displayAllHashes(hashes) {
+            const container = document.getElementById('allHashesContainer');
+            const algoNames = {
+                md5: 'MD5',
+                sha1: 'SHA-1',
+                sha256: 'SHA-256',
+                sha512: 'SHA-512'
+            };
+
+            const securityLevels = {
+                md5: { label: 'Unsicher', class: 'insecure' },
+                sha1: { label: 'Veraltet', class: 'deprecated' },
+                sha256: { label: 'Sicher', class: 'secure' },
+                sha512: { label: 'Sehr Sicher', class: 'very-secure' }
+            };
+
+            container.innerHTML = '';
+
+            Object.entries(hashes).forEach(([algo, hash]) => {
+                const hashItem = document.createElement('div');
+                hashItem.className = 'hash-item';
+                const security = securityLevels[algo];
+
+                hashItem.innerHTML = `
+                    <div class="hash-item-header">
+                        <span class="algo-name">${algoNames[algo]}</span>
+                        <span class="security-badge ${security.class}">${security.label}</span>
+                        <button class="btn-copy-small" onclick="copySpecificHash('${hash}', '${algo}')">
+                            📋
+                        </button>
+                    </div>
+                    <code class="hash-text">${hash}</code>
+                `;
+
+                container.appendChild(hashItem);
+            });
+        }
+
+        // Copy main hash
+        function copyHash() {
+            const hash = document.getElementById('hashOutput').textContent;
+            navigator.clipboard.writeText(hash).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓ Kopiert!';
+                btn.style.background = '#10b981';
+                btn.style.color = 'white';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                    btn.style.color = '';
+                }, 1500);
+            });
+        }
+
+        // Copy specific hash
+        function copySpecificHash(hash, algo) {
+            navigator.clipboard.writeText(hash).then(() => {
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = '✓';
+                btn.style.background = '#10b981';
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '';
+                }, 1500);
+            });
+        }
+    </script>
+</body>
+</html>
