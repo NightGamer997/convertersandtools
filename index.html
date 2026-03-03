@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Converters & Tools</title>
+    <title>🔧 Converters & Tools - Moderner Online Konverter</title>
     <style>
         * {
             margin: 0;
@@ -11,187 +11,329 @@
             box-sizing: border-box;
         }
 
+        :root {
+            --primary: #667eea;
+            --primary-dark: #764ba2;
+            --text: #1f2937;
+            --bg: #ffffff;
+            --bg-secondary: #f3f4f6;
+            --border: #e5e7eb;
+            --shadow: rgba(0, 0, 0, 0.1);
+        }
+
+        [data-theme="dark"] {
+            --text: #e5e7eb;
+            --bg: #1f2937;
+            --bg-secondary: #111827;
+            --border: #374151;
+            --shadow: rgba(0, 0, 0, 0.3);
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--bg) 0%, var(--bg-secondary) 100%);
+            color: var(--text);
+            transition: background 0.3s ease, color 0.3s ease;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
         }
 
         .container {
             max-width: 1200px;
-            width: 100%;
+            margin: 0 auto;
+            padding: 0 20px;
         }
 
         header {
-            text-align: center;
-            color: white;
-            margin-bottom: 60px;
-            animation: fadeInDown 0.6s ease-out;
-        }
-
-        h1 {
-            font-size: 3.5em;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
-        }
-
-        .subtitle {
-            font-size: 1.3em;
-            opacity: 0.9;
-            font-weight: 300;
-        }
-
-        .tools-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-            margin-bottom: 50px;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-        }
-
-        .tool-card {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            cursor: pointer;
-            text-decoration: none;
-            color: inherit;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            text-align: center;
-            position: relative;
+            padding: 25px 0;
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
         }
 
-        .tool-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-        }
-
-        .tool-icon {
-            font-size: 3em;
-            margin-bottom: 15px;
-            display: block;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .tool-name {
-            font-size: 1.5em;
+        .logo {
+            font-size: 1.8em;
             font-weight: bold;
-            margin-bottom: 10px;
-            color: #333;
+            display: flex;
+            gap: 10px;
+            align-items: center;
         }
 
-        .tool-description {
-            font-size: 0.95em;
-            color: #666;
-            margin-bottom: 15px;
-            flex-grow: 1;
+        .theme-toggle {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
         }
 
-        .tool-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        .theme-toggle:hover {
+            background: var(--primary);
             color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.85em;
+            border-color: var(--primary);
+        }
+
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .nav-tab {
+            padding: 12px 20px;
+            border: none;
+            background: transparent;
+            color: var(--text);
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -10px;
+            white-space: nowrap;
+        }
+
+        .nav-tab:hover {
+            color: var(--primary);
+        }
+
+        .nav-tab.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        .converter-section {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .converter-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .section-title {
+            font-size: 2.2em;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .converter-box {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px var(--shadow);
+            transition: all 0.3s ease;
+        }
+
+        .converter-box:hover {
+            box-shadow: 0 10px 25px var(--shadow);
+            border-color: var(--primary);
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
             font-weight: 600;
+            color: var(--text);
+            font-size: 0.95em;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text);
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        input[type="color"] {
+            height: 70px;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text);
+            border: 2px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .color-preview-container {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .color-preview {
+            width: 200px;
+            height: 200px;
+            border-radius: 12px;
+            margin: 0 auto;
+            border: 2px solid var(--border);
+            box-shadow: 0 4px 12px var(--shadow);
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .input-row.three {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .result-output {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 10px;
+            word-break: break-all;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .status-message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+            font-weight: 500;
+        }
+
+        .status-message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+
+        .status-message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+
+        [data-theme="dark"] .status-message.success {
+            background: rgba(76, 175, 80, 0.1);
+            color: #81c784;
+            border-color: #81c784;
+        }
+
+        [data-theme="dark"] .status-message.error {
+            background: rgba(244, 67, 54, 0.1);
+            color: #ef5350;
+            border-color: #ef5350;
         }
 
         footer {
             text-align: center;
-            color: white;
+            padding: 30px 0;
             margin-top: 60px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            animation: fadeInUp 0.8s ease-out 0.4s both;
-        }
-
-        .footer-content {
-            margin-bottom: 15px;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .social-links a {
-            color: white;
-            text-decoration: none;
-            padding: 8px 12px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 5px;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: white;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .coming-soon {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #ff6b6b;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.7em;
-            font-weight: bold;
+            border-top: 1px solid var(--border);
+            color: var(--text);
+            opacity: 0.8;
         }
 
         @media (max-width: 768px) {
-            h1 {
-                font-size: 2.5em;
+            .section-title {
+                font-size: 1.8em;
             }
 
-            .subtitle {
-                font-size: 1.1em;
+            .converter-box {
+                padding: 20px;
             }
 
-            .tools-grid {
-                gap: 20px;
+            .input-row.three {
+                grid-template-columns: 1fr;
             }
 
-            .tool-card {
-                padding: 25px;
+            .color-preview {
+                width: 150px;
+                height: 150px;
+            }
+
+            .nav-tabs {
+                gap: 5px;
+            }
+
+            .nav-tab {
+                padding: 10px 15px;
+                font-size: 0.9em;
             }
         }
     </style>
@@ -199,89 +341,557 @@
 <body>
     <div class="container">
         <header>
-            <h1>⚡ Converters & Tools</h1>
-            <p class="subtitle">Kostenlose Online-Tools für schnelle Konvertierungen und Umwandlungen</p>
+            <div class="logo">
+                <span>🔧</span>
+                <span>Converters & Tools</span>
+            </div>
+            <button class="theme-toggle" onclick="toggleTheme()" title="Dark/Light Mode">🌙</button>
         </header>
 
-        <div class="tools-grid">
-            <div class="tool-card">
-                <span class="tool-icon">🔤</span>
-                <div class="tool-name">Text zu Binär</div>
-                <p class="tool-description">Konvertiere Text in Binärcode und umgekehrt</p>
-                <span class="tool-badge">Verfügbar</span>
-            </div>
-
-            <div class="tool-card">
-                <span class="tool-icon">🎨</span>
-                <div class="tool-name">Farb-Konverter</div>
-                <p class="tool-description">Konvertiere zwischen RGB, HEX, HSL und anderen Formaten</p>
-                <span class="tool-badge">Verfügbar</span>
-            </div>
-
-            <div class="tool-card">
-                <span class="tool-icon">📏</span>
-                <div class="tool-name">Einheiten-Umrechner</div>
-                <p class="tool-description">Konvertiere Längen, Gewichte, Temperaturen und mehr</p>
-                <span class="tool-badge">Verfügbar</span>
-            </div>
-
-            <div class="tool-card">
-                <span class="tool-icon">🔐</span>
-                <div class="tool-name">Base64 Encoder/Decoder</div>
-                <p class="tool-description">Kodiere und dekodiere Text in Base64 Format</p>
-                <span class="tool-badge">Verfügbar</span>
-            </div>
-
-            <div class="tool-card">
-                <span class="tool-icon">📝</span>
-                <div class="tool-name">JSON Formatter</div>
-                <p class="tool-description">Formatiere und validiere JSON-Daten</p>
-                <span class="coming-soon">Bald</span>
-                <span class="tool-badge" style="opacity: 0.6;">In Entwicklung</span>
-            </div>
-
-            <div class="tool-card">
-                <span class="tool-icon">🔗</span>
-                <div class="tool-name">URL Encoder/Decoder</div>
-                <p class="tool-description">Kodiere und dekodiere URLs und Abfragezeichenfolgen</p>
-                <span class="tool-badge">Verfügbar</span>
-            </div>
-
-            <div class="tool-card">
-                <span class="tool-icon">⏱️</span>
-                <div class="tool-name">Unix-Zeit Konverter</div>
-                <p class="tool-description">Konvertiere Unix-Zeitstempel in lesbare Daten</p>
-                <span class="coming-soon">Bald</span>
-                <span class="tool-badge" style="opacity: 0.6;">In Entwicklung</span>
-            </div>
-
-            <div class="tool-card">
-                <span class="tool-icon">📊</span>
-                <div class="tool-name">Zahlensystem-Konverter</div>
-                <p class="tool-description">Konvertiere zwischen Dezimal, Hexadezimal, Oktal und Binär</p>
-                <span class="tool-badge">Verfügbar</span>
-            </div>
-
-            <div class="tool-card">
-                <span class="tool-icon">💾</span>
-                <div class="tool-name">Dateigrößen-Konverter</div>
-                <p class="tool-description">Konvertiere zwischen Bytes, KB, MB, GB und mehr</p>
-                <span class="tool-badge">Verfügbar</span>
-            </div>
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="showSection('text-binary', event)">🔤 Text-Binär</button>
+            <button class="nav-tab" onclick="showSection('color', event)">🎨 Farbe</button>
+            <button class="nav-tab" onclick="showSection('units', event)">📏 Einheiten</button>
+            <button class="nav-tab" onclick="showSection('base64', event)">🔐 Base64</button>
+            <button class="nav-tab" onclick="showSection('json', event)">📝 JSON</button>
+            <button class="nav-tab" onclick="showSection('url', event)">🔗 URL</button>
+            <button class="nav-tab" onclick="showSection('unix', event)">⏱️ Unix-Zeit</button>
+            <button class="nav-tab" onclick="showSection('number', event)">📊 Zahlensysteme</button>
+            <button class="nav-tab" onclick="showSection('filesize', event)">💾 Dateigröße</button>
         </div>
 
-        <footer>
-            <div class="footer-content">
-                <p>&copy; 2026 Converters & Tools. Alle Rechte vorbehalten.</p>
-                <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">Schnell • Kostenlos • Ohne Anmeldung</p>
+        <section id="text-binary" class="converter-section active">
+            <h2 class="section-title">🔤 Text zu Binär Konverter</h2>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Text → Binär</label>
+                    <textarea id="textInput" placeholder="Geben Sie Text ein..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="textToBinary()">Zu Binär konvertieren</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('binaryOutput')">Kopieren</button>
+                </div>
+                <div class="result-output" id="binaryOutput"></div>
             </div>
-            <div class="social-links">
-                <a href="#">GitHub</a>
-                <a href="#">Kontakt</a>
-                <a href="#">Datenschutz</a>
-                <a href="#">Nutzungsbedingungen</a>
+
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Binär → Text</label>
+                    <textarea id="binaryInput" placeholder="Binärcode eingeben (z.B. 01001000 01100101 01101100 01101100 01101111)..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="binaryToText()">Von Binär konvertieren</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('textOutput')">Kopieren</button>
+                </div>
+                <div class="result-output" id="textOutput"></div>
             </div>
-        </footer>
+        </section>
+
+        <section id="color" class="converter-section">
+            <h2 class="section-title">🎨 Farb-Konverter</h2>
+            <div class="converter-box">
+                <div class="color-preview-container">
+                    <div class="color-preview" id="colorPreview"></div>
+                </div>
+                <div class="input-group">
+                    <label>Farbwähler</label>
+                    <input type="color" id="colorPicker" value="#667eea" onchange="updateColorFromPicker()">
+                </div>
+                <div class="input-group">
+                    <label>HEX</label>
+                    <input type="text" id="hexInput" placeholder="#667EEA" onchange="updateColorFromHex()">
+                </div>
+                <div class="input-group">
+                    <label>RGB</label>
+                    <div class="input-row three">
+                        <input type="number" id="redInput" min="0" max="255" placeholder="R" onchange="updateColorFromRGB()">
+                        <input type="number" id="greenInput" min="0" max="255" placeholder="G" onchange="updateColorFromRGB()">
+                        <input type="number" id="blueInput" min="0" max="255" placeholder="B" onchange="updateColorFromRGB()">
+                    </div>
+                    <div class="result-output" id="rgbOutput"></div>
+                </div>
+                <div class="input-group">
+                    <label>HSL</label>
+                    <div class="input-row three">
+                        <input type="number" id="hueInput" min="0" max="360" placeholder="H (0-360)°" onchange="updateColorFromHSL()">
+                        <input type="number" id="satInput" min="0" max="100" placeholder="S (0-100)%" onchange="updateColorFromHSL()">
+                        <input type="number" id="lightInput" min="0" max="100" placeholder="L (0-100)%" onchange="updateColorFromHSL()">
+                    </div>
+                    <div class="result-output" id="hslOutput"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="units" class="converter-section">
+            <h2 class="section-title">📏 Einheiten-Umrechner</h2>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Kategorie</label>
+                    <select id="unitType" onchange="updateUnitDisplay()">
+                        <option value="length">📐 Länge</option>
+                        <option value="weight">⚖️ Gewicht</option>
+                        <option value="temperature">🌡️ Temperatur</option>
+                    </select>
+                </div>
+                <div id="unitInputs"></div>
+            </div>
+        </section>
+
+        <section id="base64" class="converter-section">
+            <h2 class="section-title">🔐 Base64 Encoder/Decoder</h2>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Text → Base64</label>
+                    <textarea id="textToEncode" placeholder="Text eingeben..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="encodeBase64()">Kodieren</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('encodedOutput')">Kopieren</button>
+                </div>
+                <div class="result-output" id="encodedOutput"></div>
+            </div>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Base64 → Text</label>
+                    <textarea id="textToDecode" placeholder="Base64 eingeben..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="decodeBase64()">Dekodieren</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('decodedOutput')">Kopieren</button>
+                </div>
+                <div class="result-output" id="decodedOutput"></div>
+            </div>
+        </section>
+
+        <section id="json" class="converter-section">
+            <h2 class="section-title">📝 JSON Formatter & Validator</h2>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>JSON eingeben</label>
+                    <textarea id="jsonInput" placeholder='{"name": "Max", "alter": 25}'></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="formatJSON()">Formatieren</button>
+                    <button class="btn btn-primary" onclick="validateJSON()">Validieren</button>
+                    <button class="btn btn-primary" onclick="minifyJSON()">Minimieren</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('jsonOutput')">Kopieren</button>
+                </div>
+                <div id="jsonStatus" class="status-message"></div>
+                <div class="result-output" id="jsonOutput" style="min-height: 150px; white-space: pre-wrap;"></div>
+            </div>
+        </section>
+
+        <section id="url" class="converter-section">
+            <h2 class="section-title">🔗 URL Encoder/Decoder</h2>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Text → URL kodiert</label>
+                    <textarea id="urlToEncode" placeholder="URL oder Text eingeben..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="encodeURL()">Kodieren</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('encodedURL')">Kopieren</button>
+                </div>
+                <div class="result-output" id="encodedURL"></div>
+            </div>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>URL dekodieren</label>
+                    <textarea id="urlToDecode" placeholder="Kodierte URL eingeben..."></textarea>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="decodeURL()">Dekodieren</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('decodedURL')">Kopieren</button>
+                </div>
+                <div class="result-output" id="decodedURL"></div>
+            </div>
+        </section>
+
+        <section id="unix" class="converter-section">
+            <h2 class="section-title">⏱️ Unix-Zeit Konverter</h2>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Unix-Zeitstempel</label>
+                    <input type="number" id="unixTimestamp" placeholder="z.B. 1704067200">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="unixToDate()">Zu Datum konvertieren</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('dateOutput')">Kopieren</button>
+                </div>
+                <div class="result-output" id="dateOutput"></div>
+            </div>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Datum & Zeit</label>
+                    <input type="datetime-local" id="dateInput">
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="dateToUnix()">Zu Timestamp konvertieren</button>
+                    <button class="btn btn-primary" onclick="currentUnix()">Aktuelle Zeit</button>
+                    <button class="btn btn-secondary" onclick="copyToClipboard('unixOutput')">Kopieren</button>
+                </div>
+                <div class="result-output" id="unixOutput"></div>
+            </div>
+        </section>
+
+        <section id="number" class="converter-section">
+            <h2 class="section-title">📊 Zahlensystem-Konverter</h2>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Dezimalzahl eingeben</label>
+                    <input type="number" id="decimalInput" placeholder="z.B. 255">
+                </div>
+                <button class="btn btn-primary" onclick="convertFromDecimal()">Konvertieren</button>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px;">
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label>Binär</label>
+                        <div class="result-output" id="binaryConv"></div>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label>Hexadezimal</label>
+                        <div class="result-output" id="hexConv"></div>
+                    </div>
+                    <div class="input-group" style="margin-bottom: 0;">
+                        <label>Oktal</label>
+                        <div class="result-output" id="octalConv"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="filesize" class="converter-section">
+            <h2 class="section-title">💾 Dateigrößen-Konverter</h2>
+            <div class="converter-box">
+                <div class="input-group">
+                    <label>Dateigröße eingeben</label>
+                    <div class="input-row">
+                        <input type="number" id="filesizeValue" placeholder="Wert">
+                        <select id="filesizeUnit">
+                            <option value="B">Bytes (B)</option>
+                            <option value="KB">Kilobyte (KB)</option>
+                            <option value="MB" selected>Megabyte (MB)</option>
+                            <option value="GB">Gigabyte (GB)</option>
+                            <option value="TB">Terabyte (TB)</option>
+                            <option value="PB">Petabyte (PB)</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="convertFilesize()">Konvertieren</button>
+                <div id="filesizeResults" style="margin-top: 20px;"></div>
+            </div>
+        </section>
     </div>
+
+    <footer>
+        <p>© 2026 Converters & Tools • Kostenlos • Ohne Anmeldung</p>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeButton();
+        }
+
+        function updateThemeButton() {
+            const theme = document.documentElement.getAttribute('data-theme') || 'light';
+            document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️' : '🌙';
+        }
+
+        window.addEventListener('load', () => {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeButton();
+            updateUnitDisplay();
+            document.getElementById('colorPicker').value = '#667eea';
+            updateColorFromPicker();
+        });
+
+        function showSection(id, event) {
+            document.querySelectorAll('.converter-section').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.value || element.textContent;
+            if (!text) return;
+            navigator.clipboard.writeText(text).then(() => {
+                const original = element.textContent || element.placeholder;
+                element.textContent = '✓ Kopiert!';
+                setTimeout(() => element.textContent = original, 1500);
+            }).catch(() => alert('Fehler beim Kopieren!'));
+        }
+
+        function textToBinary() {
+            const text = document.getElementById('textInput').value;
+            let binary = '';
+            for (let i = 0; i < text.length; i++) {
+                binary += text.charCodeAt(i).toString(2).padStart(8, '0') + ' ';
+            }
+            document.getElementById('binaryOutput').textContent = binary.trim() || '(leer)';
+        }
+
+        function binaryToText() {
+            const binary = document.getElementById('binaryInput').value;
+            let text = '';
+            try {
+                binary.trim().split(' ').forEach(byte => {
+                    if (byte) text += String.fromCharCode(parseInt(byte, 2));
+                });
+                document.getElementById('textOutput').textContent = text || '(leer)';
+            } catch(e) {
+                document.getElementById('textOutput').textContent = 'Fehler!';
+            }
+        }
+
+        function updateColorFromPicker() {
+            document.getElementById('hexInput').value = document.getElementById('colorPicker').value;
+            updateColorFromHex();
+        }
+
+        function updateColorFromHex() {
+            let hex = document.getElementById('hexInput').value.trim();
+            if (!hex.startsWith('#')) hex = '#' + hex;
+            if (!/^#[0-9A-F]{6}$/i.test(hex)) return;
+            document.getElementById('colorPreview').style.backgroundColor = hex;
+            document.getElementById('colorPicker').value = hex;
+            const r = parseInt(hex.substr(1, 2), 16);
+            const g = parseInt(hex.substr(3, 2), 16);
+            const b = parseInt(hex.substr(5, 2), 16);
+            document.getElementById('redInput').value = r;
+            document.getElementById('greenInput').value = g;
+            document.getElementById('blueInput').value = b;
+            document.getElementById('rgbOutput').textContent = `rgb(${r}, ${g}, ${b})`;
+            updateHSLFromRGB(r, g, b);
+        }
+
+        function updateColorFromRGB() {
+            const r = parseInt(document.getElementById('redInput').value) || 0;
+            const g = parseInt(document.getElementById('greenInput').value) || 0;
+            const b = parseInt(document.getElementById('blueInput').value) || 0;
+            const hex = '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
+            document.getElementById('hexInput').value = hex;
+            document.getElementById('colorPreview').style.backgroundColor = hex;
+            document.getElementById('colorPicker').value = hex;
+            document.getElementById('rgbOutput').textContent = `rgb(${r}, ${g}, ${b})`;
+            updateHSLFromRGB(r, g, b);
+        }
+
+        function updateHSLFromRGB(r, g, b) {
+            r /= 255; g /= 255; b /= 255;
+            const max = Math.max(r, g, b), min = Math.min(r, g, b);
+            let h, s, l = (max + min) / 2;
+            if (max === min) {
+                h = s = 0;
+            } else {
+                const d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch(max) {
+                    case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+                    case g: h = ((b - r) / d + 2) / 6; break;
+                    case b: h = ((r - g) / d + 4) / 6; break;
+                }
+            }
+            h = Math.round(h * 360); s = Math.round(s * 100); l = Math.round(l * 100);
+            document.getElementById('hueInput').value = h;
+            document.getElementById('satInput').value = s;
+            document.getElementById('lightInput').value = l;
+            document.getElementById('hslOutput').textContent = `hsl(${h}, ${s}%, ${l}%)`;
+        }
+
+        function updateColorFromHSL() {
+            const h = parseInt(document.getElementById('hueInput').value) / 360;
+            const s = parseInt(document.getElementById('satInput').value) / 100;
+            const l = parseInt(document.getElementById('lightInput').value) / 100;
+            let r, g, b;
+            if (s === 0) {
+                r = g = b = l;
+            } else {
+                const hue2rgb = (p, q, t) => {
+                    if (t < 0) t += 1;
+                    if (t > 1) t -= 1;
+                    if (t < 1/6) return p + (q - p) * 6 * t;
+                    if (t < 1/2) return q;
+                    if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                    return p;
+                };
+                const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+                const p = 2 * l - q;
+                r = hue2rgb(p, q, h + 1/3);
+                g = hue2rgb(p, q, h);
+                b = hue2rgb(p, q, h - 1/3);
+            }
+            const toHex = x => Math.round(x * 255).toString(16).padStart(2, '0');
+            const hex = '#' + (toHex(r) + toHex(g) + toHex(b)).toUpperCase();
+            document.getElementById('hexInput').value = hex;
+            document.getElementById('colorPreview').style.backgroundColor = hex;
+            document.getElementById('colorPicker').value = hex;
+        }
+
+        const unitTypes = {
+            length: { units: { 'm': 1, 'km': 0.001, 'cm': 100, 'mm': 1000, 'mi': 0.000621371, 'yd': 1.09361, 'ft': 3.28084, 'in': 39.3701 }, labels: { 'm': 'Meter', 'km': 'Kilometer', 'cm': 'Zentimeter', 'mm': 'Millimeter', 'mi': 'Meilen', 'yd': 'Yards', 'ft': 'Fuß', 'in': 'Zoll' } },
+            weight: { units: { 'kg': 1, 'g': 1000, 'mg': 1000000, 'lb': 2.20462, 'oz': 35.274, 't': 0.001 }, labels: { 'kg': 'Kilogramm', 'g': 'Gramm', 'mg': 'Milligramm', 'lb': 'Pfund', 'oz': 'Unzen', 't': 'Tonnen' } },
+            temperature: { convert: (val, from, to) => { if (from === to) return val; if (from === 'C') return to === 'F' ? val * 9/5 + 32 : val + 273.15; if (from === 'F') return to === 'C' ? (val - 32) * 5/9 : (val - 32) * 5/9 + 273.15; if (from === 'K') return to === 'C' ? val - 273.15 : (val - 273.15) * 9/5 + 32; return val; }, labels: { 'C': 'Celsius', 'F': 'Fahrenheit', 'K': 'Kelvin' } }
+        };
+
+        function updateUnitDisplay() {
+            const type = document.getElementById('unitType').value;
+            const container = document.getElementById('unitInputs');
+            let html = '<div class="input-group"><label>Konvertiere:</label><div class="input-row">';
+            if (type === 'temperature') {
+                ['C', 'F', 'K'].forEach(u => { html += `<input type="number" placeholder="${unitTypes.temperature.labels[u]}" id="unit_${u}" onchange="convertUnits()">`; });
+            } else {
+                Object.keys(unitTypes[type].units).forEach(u => { html += `<input type="number" placeholder="${unitTypes[type].labels[u]}" id="unit_${u}" onchange="convertUnits()">`; });
+            }
+            html += '</div></div>';
+            container.innerHTML = html;
+        }
+
+        function convertUnits() {
+            const type = document.getElementById('unitType').value;
+            if (type === 'temperature') {
+                const units = ['C', 'F', 'K'];
+                let value, fromUnit;
+                for (let u of units) {
+                    const inp = document.getElementById('unit_' + u);
+                    if (inp && inp.value) { value = parseFloat(inp.value); fromUnit = u; break; }
+                }
+                if (!value && value !== 0) return;
+                units.forEach(u => {
+                    if (u !== fromUnit) {
+                        const inp = document.getElementById('unit_' + u);
+                        if (inp) inp.value = unitTypes.temperature.convert(value, fromUnit, u).toFixed(2);
+                    }
+                });
+            } else {
+                const units = Object.keys(unitTypes[type].units);
+                let value, fromUnit;
+                for (let u of units) {
+                    const inp = document.getElementById('unit_' + u);
+                    if (inp && inp.value) { value = parseFloat(inp.value); fromUnit = u; break; }
+                }
+                if (!value && value !== 0) return;
+                const baseValue = value / unitTypes[type].units[fromUnit];
+                units.forEach(u => {
+                    if (u !== fromUnit) {
+                        const inp = document.getElementById('unit_' + u);
+                        if (inp) inp.value = (baseValue * unitTypes[type].units[u]).toFixed(6);
+                    }
+                });
+            }
+        }
+
+        function encodeBase64() {
+            const text = document.getElementById('textToEncode').value;
+            try {
+                document.getElementById('encodedOutput').textContent = btoa(unescape(encodeURIComponent(text)));
+            } catch(e) {
+                document.getElementById('encodedOutput').textContent = 'Fehler!';
+            }
+        }
+
+        function decodeBase64() {
+            const text = document.getElementById('textToDecode').value;
+            try {
+                document.getElementById('decodedOutput').textContent = decodeURIComponent(escape(atob(text)));
+            } catch(e) {
+                document.getElementById('decodedOutput').textContent = 'Fehler!';
+            }
+        }
+
+        function formatJSON() {
+            const input = document.getElementById('jsonInput').value;
+            try {
+                const formatted = JSON.stringify(JSON.parse(input), null, 2);
+                document.getElementById('jsonOutput').textContent = formatted;
+                showStatus('✓ JSON ist gültig', 'success');
+            } catch(e) {
+                showStatus('✗ Fehler: ' + e.message, 'error');
+            }
+        }
+
+        function validateJSON() {
+            try {
+                JSON.parse(document.getElementById('jsonInput').value);
+                showStatus('✓ JSON ist gültig', 'success');
+            } catch(e) {
+                showStatus('✗ Fehler: ' + e.message, 'error');
+            }
+        }
+
+        function minifyJSON() {
+            try {
+                document.getElementById('jsonOutput').textContent = JSON.stringify(JSON.parse(document.getElementById('jsonInput').value));
+                showStatus('✓ JSON minimiert', 'success');
+            } catch(e) {
+                showStatus('✗ Fehler: ' + e.message, 'error');
+            }
+        }
+
+        function showStatus(msg, type) {
+            const el = document.getElementById('jsonStatus');
+            el.textContent = msg;
+            el.className = 'status-message ' + type;
+        }
+
+        function encodeURL() {
+            document.getElementById('encodedURL').textContent = encodeURIComponent(document.getElementById('urlToEncode').value);
+        }
+
+        function decodeURL() {
+            try {
+                document.getElementById('decodedURL').textContent = decodeURIComponent(document.getElementById('urlToDecode').value);
+            } catch(e) {
+                document.getElementById('decodedURL').textContent = 'Fehler!';
+            }
+        }
+
+        function unixToDate() {
+            const ts = parseInt(document.getElementById('unixTimestamp').value);
+            if (!isNaN(ts)) {
+                document.getElementById('dateOutput').textContent = new Date(ts * 1000).toLocaleString('de-DE');
+            }
+        }
+
+        function dateToUnix() {
+            const date = document.getElementById('dateInput').value;
+            if (date) {
+                document.getElementById('unixOutput').textContent = Math.floor(new Date(date).getTime() / 1000);
+            }
+        }
+
+        function currentUnix() {
+            const ts = Math.floor(Date.now() / 1000);
+            document.getElementById('unixOutput').textContent = ts;
+            document.getElementById('dateOutput').textContent = new Date(ts * 1000).toLocaleString('de-DE');
+        }
+
+        function convertFromDecimal() {
+            const dec = parseInt(document.getElementById('decimalInput').value);
+            if (!isNaN(dec)) {
+                document.getElementById('binaryConv').textContent = dec.toString(2);
+                document.getElementById('hexConv').textContent = dec.toString(16).toUpperCase();
+                document.getElementById('octalConv').textContent = dec.toString(8);
+            }
+        }
+
+        function convertFilesize() {
+            const value = parseFloat(document.getElementById('filesizeValue').value);
+            const unit = document.getElementById('filesizeUnit').value;
+            if (isNaN(value) || value < 0) return;
+            const units = { 'B': 1, 'KB': 1024, 'MB': 1024**2, 'GB': 1024**3, 'TB': 1024**4, 'PB': 1024**5 };
+            const bytes = value * units[unit];
+            let html = '';
+            for (const [key, factor] of Object.entries(units)) {
+                html += `<div style="padding: 10px; background: var(--bg-secondary); border-radius: 6px; margin-bottom: 8px;"><strong>${key}:</strong> ${(bytes / factor).toFixed(4)}</div>`;
+            }
+            document.getElementById('filesizeResults').innerHTML = html;
+        }
+    </script>
 </body>
 </html>
