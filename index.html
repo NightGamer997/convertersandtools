@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Converters & Tools</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 60px;
+            animation: fadeInDown 0.6s ease-out;
+        }
+
+        h1 {
+            font-size: 3.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.3em;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .tool-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+        }
+
+        .tool-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .tool-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+            display: block;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tool-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .tool-description {
+            font-size: 0.95em;
+            color: #666;
+            margin-bottom: 15px;
+            flex-grow: 1;
+        }
+
+        .tool-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            color: white;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .footer-content {
+            margin-bottom: 15px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 12px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: white;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .coming-soon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff6b6b;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5em;
+            }
+
+            .subtitle {
+                font-size: 1.1em;
+            }
+
+            .tools-grid {
+                gap: 20px;
+            }
+
+            .tool-card {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ Converters & Tools</h1>
+            <p class="subtitle">Kostenlose Online-Tools für schnelle Konvertierungen und Umwandlungen</p>
+        </header>
+
+        <div class="tools-grid">
+            <div class="tool-card">
+                <span class="tool-icon">🔤</span>
+                <div class="tool-name">Text zu Binär</div>
+                <p class="tool-description">Konvertiere Text in Binärcode und umgekehrt</p>
+                <span class="tool-badge">Verfügbar</span>
+            </div>
+
+            <div class="tool-card">
+                <span class="tool-icon">🎨</span>
+                <div class="tool-name">Farb-Konverter</div>
+                <p class="tool-description">Konvertiere zwischen RGB, HEX, HSL und anderen Formaten</p>
+                <span class="tool-badge">Verfügbar</span>
+            </div>
+
+            <div class="tool-card">
+                <span class="tool-icon">📏</span>
+                <div class="tool-name">Einheiten-Umrechner</div>
+                <p class="tool-description">Konvertiere Längen, Gewichte, Temperaturen und mehr</p>
+                <span class="tool-badge">Verfügbar</span>
+            </div>
+
+            <div class="tool-card">
+                <span class="tool-icon">🔐</span>
+                <div class="tool-name">Base64 Encoder/Decoder</div>
+                <p class="tool-description">Kodiere und dekodiere Text in Base64 Format</p>
+                <span class="tool-badge">Verfügbar</span>
+            </div>
+
+            <div class="tool-card">
+                <span class="tool-icon">📝</span>
+                <div class="tool-name">JSON Formatter</div>
+                <p class="tool-description">Formatiere und validiere JSON-Daten</p>
+                <span class="coming-soon">Bald</span>
+                <span class="tool-badge" style="opacity: 0.6;">In Entwicklung</span>
+            </div>
+
+            <div class="tool-card">
+                <span class="tool-icon">🔗</span>
+                <div class="tool-name">URL Encoder/Decoder</div>
+                <p class="tool-description">Kodiere und dekodiere URLs und Abfragezeichenfolgen</p>
+                <span class="tool-badge">Verfügbar</span>
+            </div>
+
+            <div class="tool-card">
+                <span class="tool-icon">⏱️</span>
+                <div class="tool-name">Unix-Zeit Konverter</div>
+                <p class="tool-description">Konvertiere Unix-Zeitstempel in lesbare Daten</p>
+                <span class="coming-soon">Bald</span>
+                <span class="tool-badge" style="opacity: 0.6;">In Entwicklung</span>
+            </div>
+
+            <div class="tool-card">
+                <span class="tool-icon">📊</span>
+                <div class="tool-name">Zahlensystem-Konverter</div>
+                <p class="tool-description">Konvertiere zwischen Dezimal, Hexadezimal, Oktal und Binär</p>
+                <span class="tool-badge">Verfügbar</span>
+            </div>
+
+            <div class="tool-card">
+                <span class="tool-icon">💾</span>
+                <div class="tool-name">Dateigrößen-Konverter</div>
+                <p class="tool-description">Konvertiere zwischen Bytes, KB, MB, GB und mehr</p>
+                <span class="tool-badge">Verfügbar</span>
+            </div>
+        </div>
+
+        <footer>
+            <div class="footer-content">
+                <p>&copy; 2026 Converters & Tools. Alle Rechte vorbehalten.</p>
+                <p style="font-size: 0.9em; margin-top: 10px; opacity: 0.8;">Schnell • Kostenlos • Ohne Anmeldung</p>
+            </div>
+            <div class="social-links">
+                <a href="#">GitHub</a>
+                <a href="#">Kontakt</a>
+                <a href="#">Datenschutz</a>
+                <a href="#">Nutzungsbedingungen</a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>
