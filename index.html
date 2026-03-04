@@ -16,238 +16,44 @@
             <button class="theme-toggle" onclick="toggleTheme()" title="Dark/Light Mode">🌙</button>
         </header>
 
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showSection('text-binary', event)">🔤 Text-Binär</button>
-            <button class="nav-tab" onclick="showSection('color', event)">🎨 Farbe</button>
-            <button class="nav-tab" onclick="showSection('units', event)">📏 Einheiten</button>
-            <button class="nav-tab" onclick="showSection('base64', event)">🔐 Base64</button>
-            <button class="nav-tab" onclick="showSection('json', event)">📝 JSON</button>
-            <button class="nav-tab" onclick="showSection('url', event)">🔗 URL</button>
-            <button class="nav-tab" onclick="showSection('unix', event)">⏱️ Unix-Zeit</button>
-            <button class="nav-tab" onclick="showSection('number', event)">📊 Zahlensysteme</button>
-            <button class="nav-tab" onclick="showSection('filesize', event)">💾 Dateigröße</button>
+        <div class="grid">
+            <a class="card" href="converters/text-binary/index.html">
+                <div class="section-title">🔤 Text → Binär</div>
+                <div class="muted">Konvertiere Text nach Binärcode und zurück</div>
+            </a>
+            <a class="card" href="converters/color/index.html">
+                <div class="section-title">🎨 Farb-Konverter</div>
+                <div class="muted">HEX, RGB und HSL umrechnen</div>
+            </a>
+            <a class="card" href="converters/units/index.html">
+                <div class="section-title">📏 Einheiten</div>
+                <div class="muted">Länge, Gewicht und Temperatur</div>
+            </a>
+            <a class="card" href="converters/base64/index.html">
+                <div class="section-title">🔐 Base64</div>
+                <div class="muted">Base64 kodieren & dekodieren</div>
+            </a>
+            <a class="card" href="converters/json/index.html">
+                <div class="section-title">📝 JSON</div>
+                <div class="muted">Formatieren, validieren, minimieren</div>
+            </a>
+            <a class="card" href="converters/url/index.html">
+                <div class="section-title">🔗 URL</div>
+                <div class="muted">URL kodieren & dekodieren</div>
+            </a>
+            <a class="card" href="converters/unix/index.html">
+                <div class="section-title">⏱ Unix-Zeit</div>
+                <div class="muted">Timestamp ↔ Datum</div>
+            </a>
+            <a class="card" href="converters/number/index.html">
+                <div class="section-title">📊 Zahlensysteme</div>
+                <div class="muted">Dezimal → Binär/Hex/Oktal</div>
+            </a>
+            <a class="card" href="converters/filesize/index.html">
+                <div class="section-title">💾 Dateigröße</div>
+                <div class="muted">Bytes, KB, MB, GB, TB</div>
+            </a>
         </div>
-
-        <section id="text-binary" class="converter-section active">
-            <h2 class="section-title">🔤 Text zu Binär Konverter</h2>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>Text → Binär</label>
-                    <textarea id="textInput" placeholder="Geben Sie Text ein..."></textarea>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="textToBinary()">Zu Binär konvertieren</button>
-                    <button class="btn btn-secondary" onclick="copyToClipboard('binaryOutput')">Kopieren</button>
-                </div>
-                <div class="result-output" id="binaryOutput"></div>
-            </div>
-
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>Binär → Text</label>
-                    <textarea id="binaryInput" placeholder="Binärcode eingeben (z.B. 01001000 01100101 01101100 01101100 01101111)..."></textarea>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="binaryToText()">Von Binär konvertieren</button>
-                    <button class="btn btn-secondary" onclick="copyToClipboard('textOutput')">Kopieren</button>
-                </div>
-                <div class="result-output" id="textOutput"></div>
-            </div>
-        </section>
-
-        <section id="color" class="converter-section">
-            <h2 class="section-title">🎨 Farb-Konverter</h2>
-            <div class="converter-box">
-                <div class="color-preview-container">
-                    <div class="color-preview" id="colorPreview"></div>
-                </div>
-                <div class="input-group">
-                    <label>Farbwähler</label>
-                    <input type="color" id="colorPicker" value="#667eea" onchange="updateColorFromPicker()">
-                </div>
-                <div class="input-group">
-                    <label>HEX</label>
-                    <input type="text" id="hexInput" placeholder="#667EEA" onchange="updateColorFromHex()">
-                </div>
-                <div class="input-group">
-                    <label>RGB</label>
-                    <div class="input-row three">
-                        <input type="number" id="redInput" min="0" max="255" placeholder="R" onchange="updateColorFromRGB()">
-                        <input type="number" id="greenInput" min="0" max="255" placeholder="G" onchange="updateColorFromRGB()">
-                        <input type="number" id="blueInput" min="0" max="255" placeholder="B" onchange="updateColorFromRGB()">
-                    </div>
-                    <div class="result-output" id="rgbOutput"></div>
-                </div>
-                <div class="input-group">
-                    <label>HSL</label>
-                    <div class="input-row three">
-                        <input type="number" id="hueInput" min="0" max="360" placeholder="H (0-360)°" onchange="updateColorFromHSL()">
-                        <input type="number" id="satInput" min="0" max="100" placeholder="S (0-100)%" onchange="updateColorFromHSL()">
-                        <input type="number" id="lightInput" min="0" max="100" placeholder="L (0-100)%" onchange="updateColorFromHSL()">
-                    </div>
-                    <div class="result-output" id="hslOutput"></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="units" class="converter-section">
-            <h2 class="section-title">📏 Einheiten-Umrechner</h2>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>Kategorie</label>
-                    <select id="unitType" onchange="updateUnitDisplay()">
-                        <option value="length">📐 Länge</option>
-                        <option value="weight">⚖️ Gewicht</option>
-                        <option value="temperature">🌡️ Temperatur</option>
-                    </select>
-                </div>
-                <div id="unitInputs"></div>
-            </div>
-        </section>
-
-        <section id="base64" class="converter-section">
-            <h2 class="section-title">🔐 Base64 Encoder/Decoder</h2>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>Text → Base64</label>
-                    <textarea id="textToEncode" placeholder="Text eingeben..."></textarea>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="encodeBase64()">Kodieren</button>
-                    <button class="btn btn-secondary" onclick="copyToClipboard('encodedOutput')">Kopieren</button>
-                </div>
-                <div class="result-output" id="encodedOutput"></div>
-            </div>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>Base64 → Text</label>
-                    <textarea id="textToDecode" placeholder="Base64 eingeben..."></textarea>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="decodeBase64()">Dekodieren</button>
-                    <button class="btn btn-secondary" onclick="copyToClipboard('decodedOutput')">Kopieren</button>
-                </div>
-                <div class="result-output" id="decodedOutput"></div>
-            </div>
-        </section>
-
-        <section id="json" class="converter-section">
-            <h2 class="section-title">📝 JSON Formatter & Validator</h2>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>JSON eingeben</label>
-                    <textarea id="jsonInput" placeholder='{"name": "Max", "alter": 25}'></textarea>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="formatJSON()">Formatieren</button>
-                    <button class="btn btn-primary" onclick="validateJSON()">Validieren</button>
-                    <button class="btn btn-primary" onclick="minifyJSON()">Minimieren</button>
-                    <button class="btn btn-secondary" onclick="copyToClipboard('jsonOutput')">Kopieren</button>
-                </div>
-                <div id="jsonStatus" class="status-message"></div>
-                <div class="result-output" id="jsonOutput" style="min-height: 150px; white-space: pre-wrap;"></div>
-            </div>
-        </section>
-
-        <section id="url" class="converter-section">
-            <h2 class="section-title">🔗 URL Encoder/Decoder</h2>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>Text → URL kodiert</label>
-                    <textarea id="urlToEncode" placeholder="URL oder Text eingeben..."></textarea>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="encodeURL()">Kodieren</button>
-                    <button class="btn btn-secondary" onclick="copyToClipboard('encodedURL')">Kopieren</button>
-                </div>
-                <div class="result-output" id="encodedURL"></div>
-            </div>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>URL dekodieren</label>
-                    <textarea id="urlToDecode" placeholder="Kodierte URL eingeben..."></textarea>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="decodeURL()">Dekodieren</button>
-                    <button class="btn btn-secondary" onclick="copyToClipboard('decodedURL')">Kopieren</button>
-                </div>
-                <div class="result-output" id="decodedURL"></div>
-            </div>
-        </section>
-
-        <section id="unix" class="converter-section">
-            <h2 class="section-title">⏱️ Unix-Zeit Konverter</h2>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>Unix-Zeitstempel</label>
-                    <input type="number" id="unixTimestamp" placeholder="z.B. 1704067200">
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="unixToDate()">Zu Datum konvertieren</button>
-                    <button class="btn btn-secondary" onclick="copyToClipboard('dateOutput')">Kopieren</button>
-                </div>
-                <div class="result-output" id="dateOutput"></div>
-            </div>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>Datum & Zeit</label>
-                    <input type="datetime-local" id="dateInput">
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="dateToUnix()">Zu Timestamp konvertieren</button>
-                    <button class="btn btn-primary" onclick="currentUnix()">Aktuelle Zeit</button>
-                    <button class="btn btn-secondary" onclick="copyToClipboard('unixOutput')">Kopieren</button>
-                </div>
-                <div class="result-output" id="unixOutput"></div>
-            </div>
-        </section>
-
-        <section id="number" class="converter-section">
-            <h2 class="section-title">📊 Zahlensystem-Konverter</h2>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>Dezimalzahl eingeben</label>
-                    <input type="number" id="decimalInput" placeholder="z.B. 255">
-                </div>
-                <button class="btn btn-primary" onclick="convertFromDecimal()">Konvertieren</button>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px;">
-                    <div class="input-group" style="margin-bottom: 0;">
-                        <label>Binär</label>
-                        <div class="result-output" id="binaryConv"></div>
-                    </div>
-                    <div class="input-group" style="margin-bottom: 0;">
-                        <label>Hexadezimal</label>
-                        <div class="result-output" id="hexConv"></div>
-                    </div>
-                    <div class="input-group" style="margin-bottom: 0;">
-                        <label>Oktal</label>
-                        <div class="result-output" id="octalConv"></div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="filesize" class="converter-section">
-            <h2 class="section-title">💾 Dateigrößen-Konverter</h2>
-            <div class="converter-box">
-                <div class="input-group">
-                    <label>Dateigröße eingeben</label>
-                    <div class="input-row">
-                        <input type="number" id="filesizeValue" placeholder="Wert">
-                        <select id="filesizeUnit">
-                            <option value="B">Bytes (B)</option>
-                            <option value="KB">Kilobyte (KB)</option>
-                            <option value="MB" selected>Megabyte (MB)</option>
-                            <option value="GB">Gigabyte (GB)</option>
-                            <option value="TB">Terabyte (TB)</option>
-                            <option value="PB">Petabyte (PB)</option>
-                        </select>
-                    </div>
-                </div>
-                <button class="btn btn-primary" onclick="convertFilesize()">Konvertieren</button>
-                <div id="filesizeResults" style="margin-top: 20px;"></div>
-            </div>
-        </section>
     </div>
 
     <footer>

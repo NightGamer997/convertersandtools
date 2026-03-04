@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔑 UUID Generator - Converters & Tools</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <a href="../../home.html" class="back-link">← Zurück</a>
-            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+            <a href="/index.html" class="back-link">← Zurück</a>
+            <button class="theme-toggle" id="themeBtn">🌙</button>
         </header>
 
         <div class="converter-header">
@@ -168,233 +168,57 @@
         <p>Made with ❤️ | <a href="../../home.html">Alle Converter</a></p>
     </footer>
 
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/ui.js"></script>
     <script>
-        // Theme Management
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeButton(newTheme);
-        }
-
-        function updateThemeButton(theme) {
-            const btn = document.getElementById('themeBtn');
-            btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeButton(savedTheme);
-        }
-
-        loadTheme();
-
         // Tab switching
         function switchTab(tab) {
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.tab === tab) {
-                    btn.classList.add('active');
-                }
-            });
-
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-
-            if (tab === 'generate') {
-                document.getElementById('generateTab').classList.add('active');
-            } else {
-                document.getElementById('validateTab').classList.add('active');
-            }
+            document.querySelectorAll('.tab-btn').forEach(btn => { btn.classList.remove('active'); if (btn.dataset.tab === tab) btn.classList.add('active'); });
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            if (tab === 'generate') document.getElementById('generateTab').classList.add('active'); else document.getElementById('validateTab').classList.add('active');
         }
 
-        // Generate single UUID v4
+        // Secure UUID v4 generation using crypto.getRandomValues
         function generateUUIDv4() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                const r = Math.random() * 16 | 0;
-                const v = c === 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            });
+            const bytes = new Uint8Array(16);
+            crypto.getRandomValues(bytes);
+            // Per RFC 4122 set version and variant bits
+            bytes[6] = (bytes[6] & 0x0f) | 0x40; // version 4
+            bytes[8] = (bytes[8] & 0x3f) | 0x80; // variant
+            const hex = Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('');
+            return `${hex.substr(0,8)}-${hex.substr(8,4)}-${hex.substr(12,4)}-${hex.substr(16,4)}-${hex.substr(20,12)}`;
         }
 
-        // Format UUID based on options
         function formatUUID(uuid) {
             const caseOption = document.querySelector('input[name="caseOption"]:checked').value;
             const withoutHyphens = document.getElementById('withoutHyphens').checked;
             const withBraces = document.getElementById('withBraces').checked;
-
             let formatted = uuid;
-
-            if (caseOption === 'uppercase') {
-                formatted = formatted.toUpperCase();
-            }
-
-            if (withoutHyphens) {
-                formatted = formatted.replace(/-/g, '');
-            }
-
-            if (withBraces) {
-                formatted = `{${formatted}}`;
-            }
-
+            if (caseOption === 'uppercase') formatted = formatted.toUpperCase();
+            if (withoutHyphens) formatted = formatted.replace(/-/g, '');
+            if (withBraces) formatted = `{${formatted}}`;
             return formatted;
         }
 
-        // Generate multiple UUIDs
         function generateUUIDs() {
             const count = parseInt(document.getElementById('uuidCount').value);
             const uuids = [];
-
-            for (let i = 0; i < count; i++) {
-                const uuid = generateUUIDv4();
-                uuids.push(formatUUID(uuid));
-            }
-
+            for (let i = 0; i < count; i++) { const uuid = generateUUIDv4(); uuids.push(formatUUID(uuid)); }
             displayUUIDs(uuids);
         }
 
-        // Display generated UUIDs
-        function displayUUIDs(uuids) {
-            const container = document.getElementById('uuidList');
-            container.innerHTML = '';
+        function displayUUIDs(uuids){ const container=document.getElementById('uuidList'); container.innerHTML=''; uuids.forEach((uuid,idx)=>{ const item=document.createElement('div'); item.className='uuid-item'; item.innerHTML=`<code class="uuid-text">${uuid}</code><button class="btn-copy" onclick="copyUUID('${uuid}', ${idx})" id="copyBtn${idx}">📋</button>`; container.appendChild(item); }); document.getElementById('generateResults').style.display='block'; }
 
-            uuids.forEach((uuid, index) => {
-                const uuidItem = document.createElement('div');
-                uuidItem.className = 'uuid-item';
-                uuidItem.innerHTML = `
-                    <code class="uuid-text">${uuid}</code>
-                    <button class="btn-copy" onclick="copyUUID('${uuid}', ${index})" id="copyBtn${index}">
-                        📋
-                    </button>
-                `;
-                container.appendChild(uuidItem);
-            });
+        function copyUUID(uuid,index){ navigator.clipboard.writeText(uuid).catch(()=>{}); const btn=document.getElementById(`copyBtn${index}`); if(btn){ btn.textContent='✓'; setTimeout(()=>{ btn.textContent='📋'; },1500); } }
 
-            document.getElementById('generateResults').style.display = 'block';
-        }
+        function copyAllUUIDs(){ const uuids=Array.from(document.querySelectorAll('.uuid-text')).map(el=>el.textContent).join('\n'); navigator.clipboard.writeText(uuids).catch(()=>{}); }
 
-        // Copy single UUID
-        function copyUUID(uuid, index) {
-            navigator.clipboard.writeText(uuid).then(() => {
-                const btn = document.getElementById(`copyBtn${index}`);
-                btn.textContent = '✓';
-                btn.style.background = '#10b981';
-                setTimeout(() => {
-                    btn.textContent = '📋';
-                    btn.style.background = '';
-                }, 1500);
-            });
-        }
-
-        // Copy all UUIDs
-        function copyAllUUIDs() {
-            const uuids = Array.from(document.querySelectorAll('.uuid-text'))
-                .map(el => el.textContent)
-                .join('\n');
-            
-            navigator.clipboard.writeText(uuids).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = '✓ Kopiert!';
-                btn.style.background = '#10b981';
-                btn.style.color = 'white';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = '';
-                    btn.style.color = '';
-                }, 2000);
-            });
-        }
-
-        // Download UUIDs as text file
-        function downloadUUIDs() {
-            const uuids = Array.from(document.querySelectorAll('.uuid-text'))
-                .map(el => el.textContent)
-                .join('\n');
-            
-            const blob = new Blob([uuids], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `uuids-${Date.now()}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
+        function downloadUUIDs(){ const uuids=Array.from(document.querySelectorAll('.uuid-text')).map(el=>el.textContent).join('\n'); const blob=new Blob([uuids],{type:'text/plain'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`uuids-${Date.now()}.txt`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); }
 
         // Validate UUID
-        function validateUUID() {
-            const input = document.getElementById('validateInput').value.trim();
-            const resultDiv = document.getElementById('validationResult');
+        function validateUUID(){ const input=document.getElementById('validateInput').value.trim(); const resultDiv=document.getElementById('validationResult'); if(!input){ resultDiv.style.display='none'; return; } const patterns={ standard:/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i, noHyphens:/^[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$/i, withBraces:/^\{[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\}$/i }; let isValid=false; let format=''; if(patterns.standard.test(input)){ isValid=true; format='Standard UUID v4 mit Bindestrichen'; } else if(patterns.noHyphens.test(input)){ isValid=true; format='UUID v4 ohne Bindestriche'; } else if(patterns.withBraces.test(input)){ isValid=true; format='UUID v4 mit geschweiften Klammern'; } if(isValid){ resultDiv.className='validation-result valid'; resultDiv.innerHTML=`<div class="result-icon">✅</div><div class="result-content"><h4>Gültige UUID!</h4><p><strong>Format:</strong> ${format}</p><p><strong>Version:</strong> 4 (Random)</p><p><strong>Länge:</strong> ${input.length} Zeichen</p></div>`; } else { resultDiv.className='validation-result invalid'; resultDiv.innerHTML=`<div class="result-icon">❌</div><div class="result-content"><h4>Ungültige UUID</h4><p>Dies ist keine gültige UUID Version 4.</p><p>Überprüfe das Format und stelle sicher, dass:</p><ul><li>Die Version "4" an der richtigen Stelle steht</li><li>Nur Hexadezimalzeichen (0-9, a-f) verwendet werden</li><li>Die Länge korrekt ist (36 mit Bindestrichen, 32 ohne)</li></ul></div>`; } resultDiv.style.display='flex'; }
 
-            if (!input) {
-                resultDiv.style.display = 'none';
-                return;
-            }
-
-            // UUID v4 regex patterns
-            const patterns = {
-                standard: /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i,
-                noHyphens: /^[0-9a-f]{12}4[0-9a-f]{3}[89ab][0-9a-f]{15}$/i,
-                withBraces: /^\{[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\}$/i
-            };
-
-            let isValid = false;
-            let format = '';
-
-            if (patterns.standard.test(input)) {
-                isValid = true;
-                format = 'Standard UUID v4 mit Bindestrichen';
-            } else if (patterns.noHyphens.test(input)) {
-                isValid = true;
-                format = 'UUID v4 ohne Bindestriche';
-            } else if (patterns.withBraces.test(input)) {
-                isValid = true;
-                format = 'UUID v4 mit geschweiften Klammern';
-            }
-
-            if (isValid) {
-                resultDiv.className = 'validation-result valid';
-                resultDiv.innerHTML = `
-                    <div class="result-icon">✅</div>
-                    <div class="result-content">
-                        <h4>Gültige UUID!</h4>
-                        <p><strong>Format:</strong> ${format}</p>
-                        <p><strong>Version:</strong> 4 (Random)</p>
-                        <p><strong>Länge:</strong> ${input.length} Zeichen</p>
-                    </div>
-                `;
-            } else {
-                resultDiv.className = 'validation-result invalid';
-                resultDiv.innerHTML = `
-                    <div class="result-icon">❌</div>
-                    <div class="result-content">
-                        <h4>Ungültige UUID</h4>
-                        <p>Dies ist keine gültige UUID Version 4.</p>
-                        <p>Überprüfe das Format und stelle sicher, dass:</p>
-                        <ul>
-                            <li>Die Version "4" an der richtigen Stelle steht</li>
-                            <li>Nur Hexadezimalzeichen (0-9, a-f) verwendet werden</li>
-                            <li>Die Länge korrekt ist (36 mit Bindestrichen, 32 ohne)</li>
-                        </ul>
-                    </div>
-                `;
-            }
-
-            resultDiv.style.display = 'flex';
-        }
-
-        // Fill validation input with example
-        function fillValidateInput(uuid) {
-            document.getElementById('validateInput').value = uuid;
-            validateUUID();
-            switchTab('validate');
-        }
+        function fillValidateInput(uuid){ document.getElementById('validateInput').value=uuid; validateUUID(); switchTab('validate'); }
     </script>
 </body>
 </html>

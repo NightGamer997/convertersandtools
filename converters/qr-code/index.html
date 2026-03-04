@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📱 QR Code Generator - Converters & Tools</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <a href="../../home.html" class="back-link">← Zurück zur Hauptseite</a>
-            <button class="theme-toggle" onclick="toggleTheme()" title="Dark/Light Mode">🌙</button>
+            <a href="/index.html" class="back-link">← Zurück zur Übersicht</a>
+            <button class="theme-toggle" title="Dark/Light Mode">🌙</button>
         </header>
 
         <div class="converter-header">
@@ -93,6 +93,8 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/ui.js"></script>
     <script>
         let qrcode = null;
 
@@ -110,9 +112,6 @@
         }
 
         window.addEventListener('load', () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeButton();
             updateInputFields();
         });
 

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dateigröße — Converters & Tools</title>
+  <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/index.html">← Zurück zur Übersicht</a>
+      <button class="theme-toggle" title="Dark/Light Mode">🌙</button>
+    </header>
+
+    <main>
+      <h2 class="section-title">💾 Dateigrößen-Konverter</h2>
+      <div class="card">
+        <div class="input-group"><label>Dateigröße eingeben</label><div style="display:grid;grid-template-columns:1fr 140px;gap:8px"><input id="filesizeValue" type="number" placeholder="Wert"><select id="filesizeUnit"><option value="B">Bytes (B)</option><option value="KB">KB</option><option value="MB" selected>MB</option><option value="GB">GB</option><option value="TB">TB</option><option value="PB">PB</option></select></div></div>
+        <div style="display:flex;gap:10px;margin-top:8px"><button class="btn btn-primary" onclick="convertFilesize()">Konvertieren</button></div>
+        <div id="filesizeResults" style="margin-top:12px"></div>
+      </div>
+
+      <p style="margin-top:18px"><a href="/index.html">← Zurück zur Übersicht</a></p>
+    </main>
+
+    <footer>© 2026 Converters & Tools</footer>
+  </div>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/ui.js"></script>
+</body>
+</html>

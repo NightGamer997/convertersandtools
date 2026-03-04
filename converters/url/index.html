@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>URL — Converters & Tools</title>
+  <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/index.html">← Zurück zur Übersicht</a>
+      <button class="theme-toggle" title="Dark/Light Mode">🌙</button>
+    </header>
+
+    <main>
+      <h2 class="section-title">🔗 URL Encoder/Decoder</h2>
+      <div class="card">
+        <div class="input-group"><label>Text → URL kodiert</label><textarea id="urlToEncode" placeholder="URL oder Text eingeben..."></textarea></div>
+        <div style="display:flex;gap:10px;margin-bottom:10px"><button class="btn btn-primary" onclick="encodeURL()">Kodieren</button><button class="btn btn-ghost" onclick="copyToClipboard('encodedURL')">Kopieren</button></div>
+        <div class="result-output" id="encodedURL"></div>
+      </div>
+      <div class="card">
+        <div class="input-group"><label>URL dekodieren</label><textarea id="urlToDecode" placeholder="Kodierte URL eingeben..."></textarea></div>
+        <div style="display:flex;gap:10px"><button class="btn btn-primary" onclick="decodeURL()">Dekodieren</button><button class="btn btn-ghost" onclick="copyToClipboard('decodedURL')">Kopieren</button></div>
+        <div class="result-output" id="decodedURL"></div>
+      </div>
+
+      <p style="margin-top:18px"><a href="/index.html">← Zurück zur Übersicht</a></p>
+    </main>
+
+    <footer>© 2026 Converters & Tools</footer>
+  </div>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/ui.js"></script>
+</body>
+</html>

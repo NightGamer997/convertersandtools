@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Farb-Konverter — Converters & Tools</title>
+  <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/index.html" class="back-link">← Zurück zur Übersicht</a>
+      <button class="theme-toggle" title="Dark/Light Mode">🌙</button>
+    </header>
+
+    <main>
+      <h2 class="section-title">🎨 Farb-Konverter</h2>
+      <div class="card">
+        <div class="color-preview" id="colorPreview" style="width:140px;height:140px;margin-bottom:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04)"></div>
+        <div class="input-group"><label>Farbwähler</label><input type="color" id="colorPicker" value="#667eea" onchange="updateColorFromPicker()"></div>
+        <div class="input-group"><label>HEX</label><input type="text" id="hexInput" placeholder="#667EEA" onchange="updateColorFromHex()"></div>
+        <div class="input-group"><label>RGB</label><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><input id="redInput" type="number" min="0" max="255" placeholder="R" onchange="updateColorFromRGB()"><input id="greenInput" type="number" min="0" max="255" placeholder="G" onchange="updateColorFromRGB()"><input id="blueInput" type="number" min="0" max="255" placeholder="B" onchange="updateColorFromRGB()"></div><div class="result-output" id="rgbOutput"></div></div>
+        <div class="input-group"><label>HSL</label><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px"><input id="hueInput" type="number" min="0" max="360" placeholder="H" onchange="updateColorFromHSL()"><input id="satInput" type="number" min="0" max="100" placeholder="S" onchange="updateColorFromHSL()"><input id="lightInput" type="number" min="0" max="100" placeholder="L" onchange="updateColorFromHSL()"></div><div class="result-output" id="hslOutput"></div></div>
+      </div>
+
+      <p style="margin-top:18px"><a href="/index.html">← Zurück zur Übersicht</a></p>
+    </main>
+
+    <footer>© 2026 Converters & Tools</footer>
+  </div>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/ui.js"></script>
+</body>
+</html>

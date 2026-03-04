@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔒 Hash Generator - Converters & Tools</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <a href="../../home.html" class="back-link">← Zurück</a>
-            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+            <a href="/index.html" class="back-link">← Zurück</a>
+            <button class="theme-toggle" id="themeBtn">🌙</button>
         </header>
 
         <div class="converter-header">
@@ -122,6 +122,8 @@
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/ui.js"></script>
     <script>
         let currentAlgorithm = 'md5';
         let autoGenerateEnabled = false;
@@ -136,18 +138,7 @@
             updateThemeButton(newTheme);
         }
 
-        function updateThemeButton(theme) {
-            const btn = document.getElementById('themeBtn');
-            btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeButton(savedTheme);
-        }
-
-        loadTheme();
+        // Theme handled by central ui.js/app.js
 
         // Select algorithm
         function selectAlgorithm(algo) {
@@ -267,32 +258,12 @@
         // Copy main hash
         function copyHash() {
             const hash = document.getElementById('hashOutput').textContent;
-            navigator.clipboard.writeText(hash).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = '✓ Kopiert!';
-                btn.style.background = '#10b981';
-                btn.style.color = 'white';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = '';
-                    btn.style.color = '';
-                }, 1500);
-            });
+            navigator.clipboard.writeText(hash).catch(()=>{});
         }
 
         // Copy specific hash
         function copySpecificHash(hash, algo) {
-            navigator.clipboard.writeText(hash).then(() => {
-                const btn = event.target;
-                const originalText = btn.textContent;
-                btn.textContent = '✓';
-                btn.style.background = '#10b981';
-                setTimeout(() => {
-                    btn.textContent = originalText;
-                    btn.style.background = '';
-                }, 1500);
-            });
+            navigator.clipboard.writeText(hash).catch(()=>{});
         }
     </script>
 </body>

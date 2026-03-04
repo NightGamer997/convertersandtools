@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Zahlensysteme — Converters & Tools</title>
+  <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/index.html">← Zurück zur Übersicht</a>
+      <button class="theme-toggle" title="Dark/Light Mode">🌙</button>
+    </header>
+
+    <main>
+      <h2 class="section-title">📊 Zahlensystem-Konverter</h2>
+      <div class="card">
+        <div class="input-group"><label>Dezimalzahl eingeben</label><input id="decimalInput" type="number" placeholder="z.B. 255"></div>
+        <div style="display:flex;gap:10px;margin-bottom:12px"><button class="btn btn-primary" onclick="convertFromDecimal()">Konvertieren</button></div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-top:12px">
+          <div><label>Binär</label><div class="result-output" id="binaryConv"></div></div>
+          <div><label>Hexadezimal</label><div class="result-output" id="hexConv"></div></div>
+          <div><label>Oktal</label><div class="result-output" id="octalConv"></div></div>
+        </div>
+      </div>
+
+      <p style="margin-top:18px"><a href="/index.html">← Zurück zur Übersicht</a></p>
+    </main>
+
+    <footer>© 2026 Converters & Tools</footer>
+  </div>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/ui.js"></script>
+</body>
+</html>

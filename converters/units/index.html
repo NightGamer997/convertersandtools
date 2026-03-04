@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Einheiten — Converters & Tools</title>
+  <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/index.html">← Zurück zur Übersicht</a>
+      <button class="theme-toggle" title="Dark/Light Mode">🌙</button>
+    </header>
+
+    <main>
+      <h2 class="section-title">📏 Einheiten-Umrechner</h2>
+      <div class="card">
+        <div class="input-group"><label>Kategorie</label><select id="unitType" onchange="updateUnitDisplay()"><option value="length">📐 Länge</option><option value="weight">⚖️ Gewicht</option><option value="temperature">🌡️ Temperatur</option></select></div>
+        <div id="unitInputs"></div>
+      </div>
+      <p style="margin-top:18px"><a href="/index.html">← Zurück zur Übersicht</a></p>
+    </main>
+
+    <footer>© 2026 Converters & Tools</footer>
+  </div>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/ui.js"></script>
+</body>
+</html>

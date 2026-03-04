@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Unix-Zeit — Converters & Tools</title>
+  <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/index.html">← Zurück zur Übersicht</a>
+      <button class="theme-toggle" title="Dark/Light Mode">🌙</button>
+    </header>
+
+    <main>
+      <h2 class="section-title">⏱️ Unix-Zeit Konverter</h2>
+      <div class="card">
+        <div class="input-group"><label>Unix-Zeitstempel</label><input id="unixTimestamp" type="number" placeholder="z.B. 1704067200"></div>
+        <div style="display:flex;gap:10px;margin-bottom:10px"><button class="btn btn-primary" onclick="unixToDate()">Zu Datum konvertieren</button><button class="btn btn-ghost" onclick="copyToClipboard('dateOutput')">Kopieren</button></div>
+        <div class="result-output" id="dateOutput"></div>
+      </div>
+
+      <div class="card">
+        <div class="input-group"><label>Datum & Zeit</label><input id="dateInput" type="datetime-local"></div>
+        <div style="display:flex;gap:10px"><button class="btn btn-primary" onclick="dateToUnix()">Zu Timestamp konvertieren</button><button class="btn btn-primary" onclick="currentUnix()">Aktuelle Zeit</button><button class="btn btn-ghost" onclick="copyToClipboard('unixOutput')">Kopieren</button></div>
+        <div class="result-output" id="unixOutput"></div>
+      </div>
+
+      <p style="margin-top:18px"><a href="/index.html">← Zurück zur Übersicht</a></p>
+    </main>
+
+    <footer>© 2026 Converters & Tools</footer>
+  </div>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/ui.js"></script>
+</body>
+</html>

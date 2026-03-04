@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Enhance accessibility for nav tabs
+  // Accessibility hooks for nav tabs (if present)
   const tabs = Array.from(document.querySelectorAll('.nav-tab'));
   const tabList = document.querySelector('.nav-tabs');
   if (tabList) tabList.setAttribute('role', 'tablist');
@@ -13,15 +13,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Hook theme button (if function toggleTheme exists elsewhere)
+  // Hook theme button
   const themeBtn = document.querySelector('.theme-toggle');
-  if (themeBtn) themeBtn.addEventListener('click', () => {
-    if (typeof toggleTheme === 'function') toggleTheme();
-  });
+  if (themeBtn) themeBtn.addEventListener('click', () => { if (typeof toggleTheme === 'function') toggleTheme(); });
 
-  // Ensure body theme attribute defaults
+  // Default to dark theme unless user saved otherwise
   if (!document.documentElement.hasAttribute('data-theme')) {
-    const saved = localStorage.getItem('theme') || 'light';
+    const saved = localStorage.getItem('theme') || 'dark';
     document.documentElement.setAttribute('data-theme', saved);
   }
+  // update button text if function exists
+  if (typeof updateThemeButton === 'function') updateThemeButton();
 });

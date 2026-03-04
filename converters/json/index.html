@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>JSON — Converters & Tools</title>
+  <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/index.html">← Zurück zur Übersicht</a>
+      <button class="theme-toggle" title="Dark/Light Mode">🌙</button>
+    </header>
+
+    <main>
+      <h2 class="section-title">📝 JSON Formatter & Validator</h2>
+      <div class="card">
+        <div class="input-group"><label>JSON eingeben</label><textarea id="jsonInput" placeholder='{"name": "Max", "alter": 25}'></textarea></div>
+        <div style="display:flex;gap:8px;margin-bottom:10px"><button class="btn btn-primary" onclick="formatJSON()">Formatieren</button><button class="btn btn-primary" onclick="validateJSON()">Validieren</button><button class="btn btn-primary" onclick="minifyJSON()">Minimieren</button><button class="btn btn-ghost" onclick="copyToClipboard('jsonOutput')">Kopieren</button></div>
+        <div id="jsonStatus" class="status-message"></div>
+        <div class="result-output" id="jsonOutput" style="min-height:150px;white-space:pre-wrap"></div>
+      </div>
+
+      <p style="margin-top:18px"><a href="/index.html">← Zurück zur Übersicht</a></p>
+    </main>
+
+    <footer>© 2026 Converters & Tools</footer>
+  </div>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/ui.js"></script>
+</body>
+</html>

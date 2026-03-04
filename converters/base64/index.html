@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Base64 — Converters & Tools</title>
+  <link rel="stylesheet" href="/assets/css/index.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="/index.html">← Zurück zur Übersicht</a>
+      <button class="theme-toggle" title="Dark/Light Mode">🌙</button>
+    </header>
+
+    <main>
+      <h2 class="section-title">🔐 Base64 Encoder/Decoder</h2>
+      <div class="card">
+        <div class="input-group"><label>Text → Base64</label><textarea id="textToEncode" placeholder="Text eingeben..."></textarea></div>
+        <div style="display:flex;gap:10px;margin-bottom:10px"><button class="btn btn-primary" onclick="encodeBase64()">Kodieren</button><button class="btn btn-ghost" onclick="copyToClipboard('encodedOutput')">Kopieren</button></div>
+        <div class="result-output" id="encodedOutput"></div>
+      </div>
+
+      <div class="card">
+        <div class="input-group"><label>Base64 → Text</label><textarea id="textToDecode" placeholder="Base64 eingeben..."></textarea></div>
+        <div style="display:flex;gap:10px"><button class="btn btn-primary" onclick="decodeBase64()">Dekodieren</button><button class="btn btn-ghost" onclick="copyToClipboard('decodedOutput')">Kopieren</button></div>
+        <div class="result-output" id="decodedOutput"></div>
+      </div>
+
+      <p style="margin-top:18px"><a href="/index.html">← Zurück zur Übersicht</a></p>
+    </main>
+
+    <footer>© 2026 Converters & Tools</footer>
+  </div>
+  <script src="/assets/js/app.js"></script>
+  <script src="/assets/js/ui.js"></script>
+</body>
+</html>

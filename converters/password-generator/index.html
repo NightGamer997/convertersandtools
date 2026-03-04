@@ -4,186 +4,56 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔐 Password Generator - Converters & Tools</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <a href="../../home.html" class="back-link">← Zurück</a>
-            <button class="theme-toggle" onclick="toggleTheme()" id="themeBtn">🌙</button>
+            <a href="/index.html" class="back-link">← Zurück</a>
+            <button class="theme-toggle" id="themeBtn">🌙</button>
         </header>
 
-        <div class="converter-header">
-            <span class="converter-icon">🔐</span>
-            <h1>Password Generator</h1>
-            <p class="converter-subtitle">Erstelle sichere Passwörter mit individuellen Einstellungen</p>
-        </div>
+        <script src="/assets/js/app.js"></script>
+        <script src="/assets/js/ui.js"></script>
+        <script>
+            // Page-specific wiring: use central app functions where possible
+            function updateLength(){ const length = document.getElementById('passwordLength').value; document.getElementById('lengthValue').textContent = length; }
 
-        <div class="converter-box">
-            <div class="input-group">
-                <label for="passwordLength">
-                    Passwort-Länge: <span id="lengthValue">16</span> Zeichen
-                </label>
-                <input type="range" id="passwordLength" min="8" max="128" value="16" oninput="updateLength()">
-            </div>
-
-            <div class="options-grid">
-                <label class="checkbox-option">
-                    <input type="checkbox" id="useUppercase" checked>
-                    <span>Großbuchstaben (A-Z)</span>
-                </label>
-                <label class="checkbox-option">
-                    <input type="checkbox" id="useLowercase" checked>
-                    <span>Kleinbuchstaben (a-z)</span>
-                </label>
-                <label class="checkbox-option">
-                    <input type="checkbox" id="useNumbers" checked>
-                    <span>Zahlen (0-9)</span>
-                </label>
-                <label class="checkbox-option">
-                    <input type="checkbox" id="useSymbols" checked>
-                    <span>Symbole (!@#$%^&*)</span>
-                </label>
-            </div>
-
-            <div class="advanced-options">
-                <label class="checkbox-option">
-                    <input type="checkbox" id="excludeSimilar">
-                    <span>Ähnliche Zeichen ausschließen (i, l, 1, L, o, 0, O)</span>
-                </label>
-                <label class="checkbox-option">
-                    <input type="checkbox" id="excludeAmbiguous">
-                    <span>Mehrdeutige Zeichen ausschließen ({ } [ ] ( ) / \ ' " ` ~ , ; : . < >)</span>
-                </label>
-            </div>
-
-            <div class="input-group">
-                <label for="passwordCount">Anzahl der Passwörter:</label>
-                <select id="passwordCount">
-                    <option value="1">1 Passwort</option>
-                    <option value="3">3 Passwörter</option>
-                    <option value="5" selected>5 Passwörter</option>
-                    <option value="10">10 Passwörter</option>
-                    <option value="20">20 Passwörter</option>
-                </select>
-            </div>
-
-            <button class="btn btn-primary" onclick="generatePasswords()">
-                🎲 Passwörter generieren
-            </button>
-        </div>
-
-        <div id="resultsSection" style="display: none;">
-            <div class="converter-box">
-                <div class="results-header">
-                    <h3>Generierte Passwörter</h3>
-                    <button class="btn btn-secondary btn-small" onclick="copyAllPasswords()">
-                        📋 Alle kopieren
-                    </button>
-                </div>
-                <div id="passwordResults"></div>
-            </div>
-        </div>
-
-        <div class="info-box">
-            <h3>💡 Tipps für sichere Passwörter:</h3>
-            <ul>
-                <li><strong>Mindestens 12 Zeichen:</strong> Längere Passwörter sind exponentiell schwerer zu knacken</li>
-                <li><strong>Verschiedene Zeichentypen:</strong> Verwende Groß-/Kleinbuchstaben, Zahlen und Symbole</li>
-                <li><strong>Einzigartig:</strong> Nutze für jeden Account ein anderes Passwort</li>
-                <li><strong>Keine persönlichen Infos:</strong> Vermeide Namen, Geburtsdaten oder vorhersehbare Muster</li>
-                <li><strong>Passwort-Manager:</strong> Verwende einen Manager zum sicheren Speichern deiner Passwörter</li>
-                <li><strong>2FA aktivieren:</strong> Zwei-Faktor-Authentifizierung erhöht die Sicherheit erheblich</li>
-            </ul>
-
-            <div class="strength-info">
-                <h4>Passwort-Stärke Einschätzung:</h4>
-                <div class="strength-table">
-                    <div class="strength-row">
-                        <span class="strength-badge weak">Schwach</span>
-                        <span>< 8 Zeichen oder nur eine Zeichenart</span>
-                    </div>
-                    <div class="strength-row">
-                        <span class="strength-badge medium">Mittel</span>
-                        <span>8-12 Zeichen mit 2-3 Zeichenarten</span>
-                    </div>
-                    <div class="strength-row">
-                        <span class="strength-badge strong">Stark</span>
-                        <span>12-16 Zeichen mit allen Zeichenarten</span>
-                    </div>
-                    <div class="strength-row">
-                        <span class="strength-badge very-strong">Sehr Stark</span>
-                        <span>> 16 Zeichen mit allen Zeichenarten</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <footer>
-        <p>Made with ❤️ | <a href="../../home.html">Alle Converter</a></p>
-    </footer>
-
-    <script>
-        // Theme Management
-        function toggleTheme() {
-            const html = document.documentElement;
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeButton(newTheme);
-        }
-
-        function updateThemeButton(theme) {
-            const btn = document.getElementById('themeBtn');
-            btn.textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeButton(savedTheme);
-        }
-
-        loadTheme();
-
-        // Update length display
-        function updateLength() {
-            const length = document.getElementById('passwordLength').value;
-            document.getElementById('lengthValue').textContent = length;
-        }
-
-        // Generate passwords
-        function generatePasswords() {
-            const length = parseInt(document.getElementById('passwordLength').value);
-            const count = parseInt(document.getElementById('passwordCount').value);
-            
-            const useUppercase = document.getElementById('useUppercase').checked;
-            const useLowercase = document.getElementById('useLowercase').checked;
-            const useNumbers = document.getElementById('useNumbers').checked;
-            const useSymbols = document.getElementById('useSymbols').checked;
-            const excludeSimilar = document.getElementById('excludeSimilar').checked;
-            const excludeAmbiguous = document.getElementById('excludeAmbiguous').checked;
-
-            // Validate that at least one character type is selected
-            if (!useUppercase && !useLowercase && !useNumbers && !useSymbols) {
-                alert('⚠️ Bitte wähle mindestens einen Zeichentyp aus!');
-                return;
+            // Password generation uses crypto.getRandomValues for better randomness
+            function generatePasswords(){
+                const length = parseInt(document.getElementById('passwordLength').value);
+                const count = parseInt(document.getElementById('passwordCount').value);
+                const useUppercase = document.getElementById('useUppercase').checked;
+                const useLowercase = document.getElementById('useLowercase').checked;
+                const useNumbers = document.getElementById('useNumbers').checked;
+                const useSymbols = document.getElementById('useSymbols').checked;
+                const excludeSimilar = document.getElementById('excludeSimilar').checked;
+                const excludeAmbiguous = document.getElementById('excludeAmbiguous').checked;
+                if(!useUppercase && !useLowercase && !useNumbers && !useSymbols){ alert('⚠️ Bitte wähle mindestens einen Zeichentyp aus!'); return; }
+                let uppercase='ABCDEFGHIJKLMNOPQRSTUVWXYZ', lowercase='abcdefghijklmnopqrstuvwxyz', numbers='0123456789', symbols='!@#$%^&*()_+-=[]{}|;:,.<>?';
+                if(excludeSimilar){ uppercase=uppercase.replace(/[ILO]/g,''); lowercase=lowercase.replace(/[ilo]/g,''); numbers=numbers.replace(/[01]/g,''); }
+                if(excludeAmbiguous){ symbols=symbols.replace(/[{}\[\]()\/\\'"`,;:.<>]/g,''); }
+                let charset=''; if(useUppercase) charset+=uppercase; if(useLowercase) charset+=lowercase; if(useNumbers) charset+=numbers; if(useSymbols) charset+=symbols;
+                const passwords=[];
+                const buf = new Uint32Array(1);
+                for(let i=0;i<count;i++){
+                    let pw='';
+                    for(let j=0;j<length;j++){
+                        crypto.getRandomValues(buf);
+                        const idx = buf[0] % charset.length;
+                        pw += charset.charAt(idx);
+                    }
+                    passwords.push(pw);
+                }
+                displayPasswords(passwords);
             }
 
-            // Build character set
-            let charset = '';
-            let uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            let lowercase = 'abcdefghijklmnopqrstuvwxyz';
-            let numbers = '0123456789';
-            let symbols = '!@#$%^&*()_+-=[]{}|;:,.<>?';
+            function displayPasswords(passwords){ const resultsSection=document.getElementById('resultsSection'); const passwordResults=document.getElementById('passwordResults'); passwordResults.innerHTML=''; passwords.forEach((pw,idx)=>{ const div=document.createElement('div'); div.className='password-item'; div.innerHTML=`<div class="password-content"><code class="password-text">${pw}</code></div><button class="btn btn-copy" onclick="copyPassword('${pw}', ${idx})" id="copyBtn${idx}">📋</button>`; passwordResults.appendChild(div); }); resultsSection.style.display='block'; resultsSection.scrollIntoView({behavior:'smooth',block:'nearest'}); }
 
-            // Exclude similar characters
-            if (excludeSimilar) {
-                uppercase = uppercase.replace(/[ILO]/g, '');
-                lowercase = lowercase.replace(/[ilo]/g, '');
-                numbers = numbers.replace(/[01]/g, '');
+            function copyPassword(password,index){ navigator.clipboard.writeText(password).catch(()=>{}); const btn=document.getElementById(`copyBtn${index}`); if(btn){ btn.textContent='✓'; setTimeout(()=>btn.textContent='📋',1500); } }
+
+            function copyAllPasswords(){ const passwords=Array.from(document.querySelectorAll('.password-text')).map(el=>el.textContent).join('\n'); navigator.clipboard.writeText(passwords).catch(()=>{}); }
+        </script>
             }
 
             // Exclude ambiguous characters

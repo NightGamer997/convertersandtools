@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>🔤 Text zu Binär Konverter - Converters & Tools</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/assets/css/index.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <a href="../../home.html" class="back-link">← Zurück zur Hauptseite</a>
-            <button class="theme-toggle" onclick="toggleTheme()" title="Dark/Light Mode">🌙</button>
+            <a href="/index.html" class="back-link">← Zurück zur Übersicht</a>
+            <button class="theme-toggle" title="Dark/Light Mode">🌙</button>
         </header>
 
         <div class="converter-header">
@@ -55,84 +55,13 @@
         <p>&copy; 2026 Converters & Tools • <a href="../../home.html">Alle Tools</a></p>
     </footer>
 
+    <script src="/assets/js/app.js"></script>
+    <script src="/assets/js/ui.js"></script>
     <script>
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeButton();
-        }
-
-        function updateThemeButton() {
-            const theme = document.documentElement.getAttribute('data-theme') || 'light';
-            document.querySelector('.theme-toggle').textContent = theme === 'dark' ? '☀️' : '🌙';
-        }
-
-        window.addEventListener('load', () => {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
-            updateThemeButton();
-        });
-
-        function copyToClipboard(elementId) {
-            const element = document.getElementById(elementId);
-            const text = element.textContent;
-            if (!text || text === '(leer)') {
-                alert('Nichts zum Kopieren!');
-                return;
-            }
-            navigator.clipboard.writeText(text).then(() => {
-                const original = element.textContent;
-                element.textContent = '✓ Kopiert!';
-                setTimeout(() => element.textContent = original, 1500);
-            }).catch(() => alert('Fehler beim Kopieren!'));
-        }
-
-        function textToBinary() {
-            const text = document.getElementById('textInput').value;
-            if (!text) {
-                document.getElementById('binaryOutput').textContent = '(leer)';
-                return;
-            }
-            let binary = '';
-            for (let i = 0; i < text.length; i++) {
-                binary += text.charCodeAt(i).toString(2).padStart(8, '0') + ' ';
-            }
-            document.getElementById('binaryOutput').textContent = binary.trim();
-        }
-
-        function binaryToText() {
-            const binary = document.getElementById('binaryInput').value;
-            if (!binary) {
-                document.getElementById('textOutput').textContent = '(leer)';
-                return;
-            }
-            let text = '';
-            try {
-                binary.trim().split(' ').forEach(byte => {
-                    if (byte) {
-                        const charCode = parseInt(byte, 2);
-                        if (isNaN(charCode)) throw new Error('Ungültiger Binärcode');
-                        text += String.fromCharCode(charCode);
-                    }
-                });
-                document.getElementById('textOutput').textContent = text || '(leer)';
-            } catch(e) {
-                document.getElementById('textOutput').textContent = '❌ Fehler: Ungültiger Binärcode!';
-            }
-        }
-
-        function clearInputs() {
-            document.getElementById('textInput').value = '';
-            document.getElementById('binaryOutput').textContent = '';
-            document.getElementById('binaryInput').value = '';
-            document.getElementById('textOutput').textContent = '';
-        }
-
-        // Auto-convert on input
-        document.getElementById('textInput').addEventListener('input', textToBinary);
-        document.getElementById('binaryInput').addEventListener('input', binaryToText);
+        // small wiring for this page
+        function clearInputs(){ document.getElementById('textInput').value=''; document.getElementById('binaryOutput').textContent=''; document.getElementById('binaryInput').value=''; document.getElementById('textOutput').textContent=''; }
+        document.getElementById('textInput')?.addEventListener('input', textToBinary);
+        document.getElementById('binaryInput')?.addEventListener('input', binaryToText);
     </script>
 </body>
 </html>
