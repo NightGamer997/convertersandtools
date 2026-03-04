@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Accessibility hooks for nav tabs (if present)
+  // Accessibility hooks for nav tabs
   const tabs = Array.from(document.querySelectorAll('.nav-tab'));
   const tabList = document.querySelector('.nav-tabs');
   if (tabList) tabList.setAttribute('role', 'tablist');
@@ -13,15 +13,49 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Hook theme button
+  // Theme handling
   const themeBtn = document.querySelector('.theme-toggle');
-  if (themeBtn) themeBtn.addEventListener('click', () => { if (typeof toggleTheme === 'function') toggleTheme(); });
 
-  // Default to dark theme unless user saved otherwise
-  if (!document.documentElement.hasAttribute('data-theme')) {
-    const saved = localStorage.getItem('theme') || 'dark';
-    document.documentElement.setAttribute('data-theme', saved);
+  function applyTheme(t){
+    document.documentElement.setAttribute('data-theme', t);
+    try{ localStorage.setItem('theme', t); }catch(e){}
+    updateThemeButton(t);
   }
-  // update button text if function exists
-  if (typeof updateThemeButton === 'function') updateThemeButton();
+
+  // Toggle theme (dark <-> light)
+  function toggleTheme(){
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
+    applyTheme(next);
+  }
+
+  // Update appearance of theme button
+  function updateThemeButton(theme){
+    const btn = document.querySelector('.theme-toggle');
+    if(!btn) return;
+    btn.setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
+    btn.dataset.theme = theme;
+    btn.innerHTML = theme === 'dark' ? '🌙 Dark' : '☀️ Light';
+  }
+
+  // Expose helpers globally for pages that call them
+  window.toggleTheme = toggleTheme;
+  window.updateThemeButton = updateThemeButton;
+
+  if (themeBtn) {
+    themeBtn.addEventListener('click', toggleTheme);
+    themeBtn.setAttribute('role','button');
+    themeBtn.setAttribute('aria-label','Toggle dark / light theme');
+  }
+
+  // Initialize theme: prefer saved, then system preference, fallback to dark
+  const saved = (() => { try { return localStorage.getItem('theme'); } catch(e){ return null; } })();
+  if (saved) {
+    applyTheme(saved);
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+    applyTheme('light');
+  } else {
+    applyTheme('dark');
+  }
 });
+
